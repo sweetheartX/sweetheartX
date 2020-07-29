@@ -3,7 +3,7 @@ const authController = require('../Controllers/authController.js');
 
 const router = express.Router();
 
-// get router for explore page
+// Loads profile info when creator avatar is clicked on idea card
 router.get('/:username', authController.getProfile, (req, res) => {
   // console.log('res.locals.ideas', res.locals.ideas);
   res.json(res.locals.userData);

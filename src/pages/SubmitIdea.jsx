@@ -1,8 +1,8 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-import axios from 'axios';
 
 const SubmitIdea = (props) => {
   const { authStatus } = props;
@@ -97,9 +97,7 @@ const SubmitIdea = (props) => {
         justifyContent: 'center',
       }}
     >
-      <h1 style={{ textAlign: 'center' }}>
-        You submitted your idea successfully!
-      </h1>
+      <h1 style={{ textAlign: 'center' }}>You submitted your idea successfully!</h1>
       <div
         style={{
           width: '100%',
@@ -112,12 +110,7 @@ const SubmitIdea = (props) => {
         <Button variant="primary" onClick={() => setIsSubmitted(false)}>
           SUBMIT ANOTHER ONE
         </Button>
-        <Button
-          href="/explore"
-          style={{ marginLeft: 10 }}
-          variant="outline-primary"
-          type="link"
-        >
+        <Button href="/explore" style={{ marginLeft: 10 }} type="link" variant="outline-primary">
           GO EXPLORE IDEAS
         </Button>
       </div>
@@ -130,54 +123,44 @@ const SubmitIdea = (props) => {
             <Form.Group controlId="name">
               <Form.Label>WHAT</Form.Label>
               <Form.Text className="text-muted">Name your idea</Form.Text>
-              <Form.Control
-                name="ideaName"
-                onChange={handleChange}
-                type="text"
-              />
+              <Form.Control name="ideaName" type="text" onChange={handleChange} />
             </Form.Group>
 
             <Form.Group controlId="description">
               <Form.Text className="text-muted">Describe your idea</Form.Text>
-              <Form.Control onChange={handleChange} type="text" />
+              <Form.Control type="text" onChange={handleChange} />
             </Form.Group>
 
             <Form.Group controlId="why">
               <Form.Label>WHY</Form.Label>
-              <Form.Text className="text-muted">
-                Why do feel passionate about this idea?
-              </Form.Text>
-              <Form.Control onChange={handleChange} type="text" />
+              <Form.Text className="text-muted">Why do feel passionate about this idea?</Form.Text>
+              <Form.Control type="text" onChange={handleChange} />
             </Form.Group>
 
             <Form.Group>
               <Form.Label>HOW</Form.Label>
               <Form.Text className="text-muted">Choose your tech</Form.Text>
               <Typeahead
+                multiple
                 id="techStacks"
                 labelKey="name"
-                multiple
-                onChange={setTechStack}
                 options={retrievedTechStacks}
                 selected={techStack}
+                onChange={setTechStack}
               />
             </Form.Group>
 
             <Form.Group controlId="who">
               <Form.Label>WHO</Form.Label>
-              <Form.Text className="text-muted">
-                Desired Number of Teammates
-              </Form.Text>
-              <Form.Control onChange={handleChange} type="text" />
+              <Form.Text className="text-muted">Desired Number of Teammates</Form.Text>
+              <Form.Control type="text" onChange={handleChange} />
             </Form.Group>
           </Col>
           <Col md={6}>
             <Form.Group controlId="uploadImage">
               <Form.Label>Upload Image: </Form.Label>
-              <Form.Text className="text-muted">
-                for now, put a image source url
-              </Form.Text>
-              <Form.Control onChange={handleChange} size="lg" type="text" />
+              <Form.Text className="text-muted">for now, put a image source url</Form.Text>
+              <Form.Control size="lg" type="text" onChange={handleChange} />
             </Form.Group>
 
             <Form.Group controlId="whenStart">
@@ -185,33 +168,26 @@ const SubmitIdea = (props) => {
               <Form.Text className="text-muted">
                 What do you want to start?
                 <br />
-                Note: This is also the date you will stop accepting new
-                teammates.
+                Note: This is also the date you will stop accepting new teammates.
               </Form.Text>
-              <Form.Control
-                onChange={(e) => setWhenStart(e.target.value)}
-                type="date"
-              />
+              <Form.Control type="date" onChange={(e) => setWhenStart(e.target.value)} />
             </Form.Group>
             <Form.Group controlId="whenEnd">
               <Form.Text className="text-muted">
                 When is the expected due date? (optional)
               </Form.Text>
-              <Form.Control
-                onChange={(e) => setWhenEnd(e.target.value)}
-                type="date"
-              />
+              <Form.Control type="date" onChange={(e) => setWhenEnd(e.target.value)} />
             </Form.Group>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button variant="primary" type="submit">
+              <Button type="submit" variant="primary">
                 SUBMIT
               </Button>
               {'   '}
               <Button
                 href="/explore"
                 style={{ marginLeft: 10 }}
-                variant="outline-primary"
                 type="link"
+                variant="outline-primary"
               >
                 CANCEL
               </Button>

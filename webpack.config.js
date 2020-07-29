@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -38,15 +37,10 @@ const config = {
           },
         ],
       },
-      {
-        test: /\.ts(x)?$/,
-        loader: 'ts-loader',
-        exclude: /node_modules/,
-      },
     ],
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.tsx', '.ts'],
+    extensions: ['.js', '.jsx'],
     alias: {
       'react-dom': '@hot-loader/react-dom',
     },
@@ -60,7 +54,7 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: `./public/index.html`,
+      template: './public/index.html',
     }),
   ],
 };

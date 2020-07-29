@@ -1,6 +1,6 @@
-import React, { Fragment, useState, useEffect } from 'react'
-import { Container, Col, Row, Button } from 'react-bootstrap';
-import Spinner from './Spinner';
+import React, { useState, useEffect } from 'react';
+import { Container, Col, Row } from 'react-bootstrap';
+import Spinner from '../components/Spinner';
 import '../styles/user-profile.scss';
 
 const Profile = (props) => {
@@ -9,18 +9,19 @@ const Profile = (props) => {
    * creatorUsername (possibly) passed in from IdeaPage
    * authStatus always passed in from App
    */
-  let { ideaCreator, authStatus } = props;
+  console.log(props);
+  const { ideaCreator, authStatus } = props;
 
   // Destructure currently authenticated user's username from authStatus
-  let { username } = authStatus;
+  const { username } = authStatus;
 
   // Initialize creator name-to-display to currently authenticated user
   let creatorName = username;
 
   // Accessing Profile from Idea Page?
   if (ideaCreator) {
-    console.log('idea creator is : ', ideaCreator)
-    // If logged-in user is _not_ clicking on their own profile picture, 
+    console.log('idea creator is : ', ideaCreator);
+    // If logged-in user is _not_ clicking on their own profile picture,
     // RESET name-to-display to that of the User being clicked by logged-in User
     if (loggedInUsername !== ideaCreator) {
       creatorName = ideaCreator;
@@ -59,28 +60,29 @@ const Profile = (props) => {
   if (!Object.keys(userData).length) {
     return <Spinner />;
   }
-  else if (userData.err) {
+  if (userData.err) {
     return <Container>Could not load user</Container>;
   }
 
   return (
-    <Container id='userProfileContainer'>
-      <Row className='mb-4' id='row1'>
-        <h3>
-          {creatorName}'s Developer Profile
-        </h3>
-        <img id='profilePic' src='https://www.clker.com/cliparts/Z/j/o/Z/g/T/turquoise-anonymous-man-hi.png' />
+    <Container id="userProfileContainer">
+      <Row className="mb-4" id="row1">
+        <h3>{creatorName}'s Developer Profile</h3>
+        <img
+          id="profilePic"
+          src="https://www.clker.com/cliparts/Z/j/o/Z/g/T/turquoise-anonymous-man-hi.png"
+        />
       </Row>
-      <Row id='row2'>
-        <Col className='cardHeader' id='bioCard'>
-          <Fragment>Bio</Fragment>
+      <Row id="row2">
+        <Col className="cardHeader" id="bioCard">
+          <>Bio</>
         </Col>
-        <Col className='cardHeader ml-5' id='contactInfoCard'>
-          <Fragment>Where else can your future teammates contact you?</Fragment>
+        <Col className="cardHeader ml-5" id="contactInfoCard">
+          <>Where else can your future teammates contact you?</>
         </Col>
       </Row>
     </Container>
   );
-}
+};
 
 export default Profile;
