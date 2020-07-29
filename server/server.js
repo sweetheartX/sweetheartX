@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files
-app.use(express.static(path.resolve(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../dist')));
 
 // Session authentication
 app.use(

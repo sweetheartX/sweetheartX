@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card, NavLink, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { Card, Button } from 'react-bootstrap';
 
 const IdeaCard = ({ idea, authStatus }) => (
   <Card className="m-3" style={{ width: '20rem' }}>
@@ -11,7 +12,7 @@ const IdeaCard = ({ idea, authStatus }) => (
         <span style={{ fontSize: 13, fontWeight: 'bold' }}>Tech Stack: </span> <br />
         {idea.techstacks.join(', ')}
       </Card.Text>
-      <NavLink
+      <Link
         to={{
           pathname: '/idea',
           state: {
@@ -21,7 +22,7 @@ const IdeaCard = ({ idea, authStatus }) => (
         }}
       >
         <Button variant="primary"> Find out more </Button>
-      </NavLink>
+      </Link>
     </Card.Body>
   </Card>
 );
