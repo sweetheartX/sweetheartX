@@ -125,3 +125,9 @@ CREATE INDEX fkIdx_97 ON User_tech_stacks
 (
  tech_id
 );
+
+INSERT INTO Tech_Stacks (name) VALUES
+  ('Node'),
+  ('Express'),
+  ('React'),
+  ('PostgreSQL');

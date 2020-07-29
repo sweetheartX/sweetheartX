@@ -1,39 +1,44 @@
 const express = require('express');
 const path = require('path');
-
-const app = express();
-const cookieParser = require('cookie-parser');
-const bcrypt = require('bcrypt');
 const session = require('express-session');
-const model = require('./Models/model');
+const flash = require('express-flash');
+const passport = require('passport');
+
+require('dotenv').config();
+
 const signUpRouter = require('./Routers/signupRouter');
 const exploreRouter = require('./Routers/exploreRouter');
 const submitRouter = require('./Routers/submitRouter');
 const loginRouter = require('./Routers/loginRouter');
 const profileRouter = require('./Routers/profileRouter');
-const flash = require('express-flash');
+
 const initializePassport = require('./passport');
-const passport = require('passport');
-initializePassport(passport);
-require('dotenv').config();
+
+const app = express();
 const PORT = 3000;
 
-/*
- * Handle parsing request body
- */
+initializePassport(passport);
+
+// Handle parsing request body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files
 app.use(express.static(path.resolve(__dirname, 'public')));
+
+// Session authentication
 app.use(
   session({
     secret: 'secret',
     resave: false,
     saveUninitialized: false,
-  })
+  }),
 );
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+
+// Routing
 app.use('/api/login', loginRouter);
 app.use('/api/signup', signUpRouter);
 app.use('/api/explore', exploreRouter);
@@ -50,14 +55,12 @@ app.use((err, req, res, next) => {
     status: 400,
     message: { err: 'An error occurred' },
   };
-  const errorObj = Object.assign({}, defaultErr, err);
+  const errorObj = { ...defaultErr, ...err };
   console.log(errorObj.log);
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-/*
- * Start server
- */
+// Start server
 app.listen(PORT, () => {
   console.log(`Server listening on port: ${PORT}`);
 });

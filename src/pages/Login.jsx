@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
+import { Form, Button } from 'react-bootstrap';
 import '../styles/login-signup.scss';
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
-import { Form, Button } from 'react-bootstrap';
 
 const Login = (props) => {
   const { authStatus, setAuthStatus } = props;
@@ -18,12 +18,14 @@ const Login = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Pulled from state => copied out but not validated?
     const { username, password } = loginInputs;
     const body = {
       username,
       password,
     };
-    let response = await fetch('/api/login', {
+    const response = await fetch('/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -53,23 +55,15 @@ const Login = (props) => {
         <Form>
           <Form.Group controlId="username">
             <Form.Label>Username</Form.Label>
-            <Form.Control
-              type="username"
-              placeholder="Username"
-              onChange={setInput}
-            />
+            <Form.Control placeholder="Username" type="username" onChange={setInput} />
           </Form.Group>
 
           <Form.Group controlId="password">
             <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              onChange={setInput}
-            />
+            <Form.Control placeholder="Password" type="password" onChange={setInput} />
           </Form.Group>
 
-          <Button variant="primary" type="submit" onClick={handleSubmit}>
+          <Button type="submit" variant="primary" onClick={handleSubmit}>
             Submit
           </Button>
           <div className={loginStatus === false ? 'error-msg' : 'hidden'}>
