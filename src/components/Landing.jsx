@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
+// withRouter gives you access to history prop
 import { withRouter } from 'react-router-dom';
 
 /*
@@ -11,22 +12,26 @@ const redirectToPath = (history, path) => {
   history.push(path);
 };
 
+// history is destructured from props
 const Landing = ({ history }) => {
   return (
     <Container fluid className='container'>
       <div className="mt-5">
         <h1 className="d-flex justify-content-center">
           {" "}
-          Welcome to Scratch Project{" "}
+          Welcome to Scratch Project
+          {" "}
         </h1>
         <br />
         <h2 className="mb-5 d-flex justify-content-center">
           {" "}
-          A place where developers make their dreams come true{" "}
+          A place where developers make their dreams come true
+          {" "}
         </h2>
         <br />
       </div>
       <div className="mt-5 d-flex justify-content-center">
+        {/* redirectToPath vs. <Link to ='/explore' /> for below? */}
         <Button
           className="w-25"
           onClick={() => redirectToPath(history, "/explore")}

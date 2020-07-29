@@ -40,6 +40,9 @@ app.use('/api/explore', exploreRouter);
 app.use('/api/submit', submitRouter);
 app.use('/api/profile', profileRouter);
 
+// 404 catch all error handler
+app.use('*', (req, res) => res.sendStatus(404));
+
 // globoal error handler
 app.use((err, req, res, next) => {
   const defaultErr = {

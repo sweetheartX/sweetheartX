@@ -12,8 +12,8 @@ const Login = (props) => {
     password: '',
   });
 
-  //used to toggle error message if auth fails
-  //as well as redirect if auth succeeds
+  // used to toggle error message if auth fails
+  // as well as redirect if auth succeeds
   const [loginStatus, setLoginStatus] = useState(null);
 
   const handleSubmit = async (e) => {
@@ -34,6 +34,7 @@ const Login = (props) => {
     if (response.status === 200) {
       setLoginStatus(true);
       setAuthStatus({ isLoggedIn: true, username });
+      /* should add logic to setLoginInputs back to empty strings? */
     } else setLoginStatus(false);
   };
 

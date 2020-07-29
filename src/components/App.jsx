@@ -1,14 +1,19 @@
+/* eslint-disable react/jsx-fragments */
 import React, { Fragment, useState } from 'react';
-import Landing from './Landing.jsx';
-import Explore from './Explore.jsx';
-import Login from './Login.jsx';
-import Signup from './Signup.jsx';
-import Profile from './Profile.jsx';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+// components
+import Landing from './Landing';
+import Explore from './Explore';
+import Login from './Login';
+import Signup from './Signup';
+import Profile from './Profile';
 import NavigateBar from './NavigateBar';
 import IdeaPage from './IdeaPage';
 import SubmitIdea from './SubmitIdea';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import '../../node_modules/bootstrap/dist/css/bootstrap.css';
+
+// styling
+import '../../node_modules/bootstrap/dist/css/bootstrap.css'; // necessary to import this entire file?
 
 const App = () => {
   const [authStatus, setAuthStatus] = useState({

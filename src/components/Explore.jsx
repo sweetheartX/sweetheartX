@@ -46,7 +46,7 @@ const Explore = (props) => {
     setTechFilter(newTechFilter);
   };
 
-  // get technologies
+  // get technologies - replace each el in techList with a string of tech name
   const techStack = techList.map((tech) => tech.name);
   // Generate checkbox component for each technology
   const generateTech = techStack.map((tech, idx) => {
@@ -78,10 +78,10 @@ const Explore = (props) => {
     return data.name.toLowerCase().indexOf(query.toLowerCase()) !== -1;
   });
 
-  //check if user wants to filter for tech, otherwise just return sortedIdeas as-is
+  // check if user wants to filter for tech, otherwise just return sortedIdeas as-is
   const filteredIdeas = techFilter.length
     ? sortedIdeas.filter((idea) => {
-      //if idea has tech that is inside techFilter, then include that idea
+      // if idea has tech that is inside techFilter, then include that idea
       for (let i = 0; i < techFilter.length; i++) {
         const selectedTech = techFilter[i];
         if (!idea.techstacks.includes(selectedTech)) return false;
@@ -164,6 +164,7 @@ const Explore = (props) => {
     </Container>
   );
 
+  // if there's only 1 idea, page will render spinner
   return response.length === 1 ? (
     <Spinner />
   ) : (

@@ -48,9 +48,11 @@ const Signup = (props) => {
       body: JSON.stringify(body),
     });
 
+    // write logic to verify duplicate sign ups
     if (response.status === 200) {
       setRegisterStatus(true);
       setAuthStatus({ isLoggedIn: true, username });
+      /* should add logic to setRegistrationInputs back to empty strings? */
     } else
       setErrorMsg('New user could not be created - duplicate username/email');
   };
