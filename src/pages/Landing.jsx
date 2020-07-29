@@ -5,7 +5,7 @@ import { Button, Container } from 'react-bootstrap';
 const Landing = () => (
   <Container fluid className="container">
     <div className="mt-5">
-      <h1 className="d-flex justify-content-center"> Welcome to Scratch Project </h1>
+      <h1 className="d-flex justify-content-center"> Welcome to sweetheartX </h1>
       <br />
       <h2 className="mb-5 d-flex justify-content-center">
         {' '}
