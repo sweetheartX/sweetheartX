@@ -22,7 +22,7 @@ CREATE TABLE Users
 );
 
 CREATE INDEX fkIdx_34 ON Users
-(z1
+(
 username
 );
 
@@ -82,6 +82,13 @@ CREATE INDEX fkIdx_69 ON Favorites
  idea_id
 );
 
+CREATE TABLE Tech_Stacks
+(
+  tech_id serial NOT NULL,
+  name varchar(50) NOT NULL,
+  CONSTRAINT PK_tech_stacks PRIMARY KEY ( tech_id )
+);
+
 CREATE TABLE Idea_Tech_Stacks
 (
   idea_id integer NOT NULL,
@@ -98,13 +105,6 @@ CREATE INDEX fkIdx_84 ON Idea_Tech_Stacks
 CREATE INDEX fkIdx_87 ON Idea_Tech_Stacks
 (
  tech_id
-);
-
-CREATE TABLE Tech_Stacks
-(
-  tech_id serial NOT NULL,
-  name varchar(50) NOT NULL,
-  CONSTRAINT PK_tech_stacks PRIMARY KEY ( tech_id )
 );
 
 CREATE TABLE User_tech_stacks
@@ -125,3 +125,9 @@ CREATE INDEX fkIdx_97 ON User_tech_stacks
 (
  tech_id
 );
+
+INSERT INTO Tech_Stacks (name) VALUES
+  ('Node'),
+  ('Express'),
+  ('React'),
+  ('PostgreSQL');
