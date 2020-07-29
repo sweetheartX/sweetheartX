@@ -36,7 +36,7 @@ const Login = (props) => {
     if (response.status === 200) {
       setLoginStatus(true);
       setAuthStatus({ isLoggedIn: true, username });
-      /* should add logic to setLoginInputs back to empty strings? */
+      setLoginInputs({ password: '' }); // pw changed back to empty string in state after sending info to db
     } else setLoginStatus(false);
   };
 

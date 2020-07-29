@@ -3,6 +3,9 @@ const path = require('path');
 const session = require('express-session');
 const flash = require('express-flash');
 const passport = require('passport');
+const PostgreSqlStore = require('connect-pg-simple')(session);
+
+const { PG_URI } = process.env;
 
 require('dotenv').config();
 
@@ -19,21 +22,32 @@ const PORT = 3000;
 
 initializePassport(passport);
 
+app.use(
+  session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+    // store: new PostgreSqlStore({
+    //   conString: PG_URI,
+    // }),
+    cookie: {
+      maxAge: 3500000,
+    },
+    // genid: (req) => {
+    //   console.log('inside the session middleware');
+    //   console.log(req.sessionID);
+    // },
+  }),
+);
+
 // Handle parsing request body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files
-app.use(express.static(path.resolve(__dirname, 'public')));
+app.use(express.static(path.resolve(__dirname, '../dist')));
 
 // Session authentication
-app.use(
-  session({
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: false,
-  }),
-);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
