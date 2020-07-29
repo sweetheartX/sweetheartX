@@ -21,6 +21,7 @@
   "rules": {
       "prettier/prettier": ["warn"],
       "arrow-body-style": ["error", "as-needed"],
+      "camelcase": "off",
       "default-case-last": "error",
       "default-param-last": ["error"],
       "func-style": ["off", "expression"],

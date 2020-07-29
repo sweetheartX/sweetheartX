@@ -1,11 +1,10 @@
 const express = require('express');
 const path = require('path');
-const bcrypt = require('bcrypt'); // UNUSED
 const session = require('express-session');
 const flash = require('express-flash');
 const passport = require('passport');
 
-const model = require('./Models/model'); // UNUSED
+require('dotenv').config();
 
 const signUpRouter = require('./Routers/signupRouter');
 const exploreRouter = require('./Routers/exploreRouter');
@@ -19,7 +18,6 @@ const app = express();
 const PORT = 3000;
 
 initializePassport(passport);
-require('dotenv').config();
 
 // Handle parsing request body
 app.use(express.json());

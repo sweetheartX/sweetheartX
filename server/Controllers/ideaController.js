@@ -1,13 +1,12 @@
 const model = require('../Models/model.js');
 
-// controllers for explor page
+// controllers for explore page
 const ideaController = {};
 
 // middleware to get all ideas data from database
 ideaController.getIdeas = (req, res, next) => {
-  /* query text will join tables for ideas, idea_tech_stacks, and tech_stacks
-  then aggregate the tech stack names into an array
-  */
+  // query text will join tables for ideas, idea_tech_stacks, and tech_stacks
+  // then aggregate the tech stack names into an array
   const queryText = `SELECT Ideas.*, array_agg(tech_stacks.name) AS techstacks FROM Ideas 
     JOIN Idea_tech_stacks ON Idea_tech_stacks.idea_id = Ideas.idea_id 
     JOIN tech_stacks ON tech_stacks.tech_id=Idea_tech_stacks.tech_id 
@@ -54,43 +53,23 @@ ideaController.submitIdea = (req, res, next) => {
   let queryText1;
   let queryValue1;
   if (!whenEnd && !imageURL) {
-    queryText1 = `INSERT INTO Ideas (name, description, why, when_start, who, creator_username) VALUES ($1, $2, $3, $4, $5, $6) RETURNING idea_id`;
+    queryText1 =
+      'INSERT INTO Ideas (name, description, why, when_start, who, creator_username) VALUES ($1, $2, $3, $4, $5, $6) RETURNING idea_id';
     queryValue1 = [name, description, why, whenStart, teamNumberInt, username];
   } else if (!imageURL) {
-    queryText1 = `INSERT INTO Ideas (name, description, why, when_start, when_end, who, creator_username) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING idea_id`;
-    queryValue1 = [
-      name,
-      description,
-      why,
-      whenStart,
-      whenEnd,
-      teamNumberInt,
-      username,
-    ];
+    queryText1 =
+      'INSERT INTO Ideas (name, description, why, when_start, when_end, who, creator_username) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING idea_id';
+    queryValue1 = [name, description, why, whenStart, whenEnd, teamNumberInt, username];
   } else if (!whenEnd) {
-    queryText1 = `INSERT INTO Ideas (name, description, why, when_start, who, image, creator_username) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING idea_id`;
-    queryValue1 = [
-      name,
-      description,
-      why,
-      whenStart,
-      teamNumberInt,
-      imageURL,
-      username,
-    ];
+    queryText1 =
+      'INSERT INTO Ideas (name, description, why, when_start, who, image, creator_username) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING idea_id';
+    queryValue1 = [name, description, why, whenStart, teamNumberInt, imageURL, username];
   } else {
-    queryText1 = `INSERT INTO Ideas (name, description, why, when_start, when_end, who, image, creator_username) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING idea_id`;
-    queryValue1 = [
-      name,
-      description,
-      why,
-      whenStart,
-      whenEnd,
-      teamNumberInt,
-      imageURL,
-      username,
-    ];
+    queryText1 =
+      'INSERT INTO Ideas (name, description, why, when_start, when_end, who, image, creator_username) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING idea_id';
+    queryValue1 = [name, description, why, whenStart, whenEnd, teamNumberInt, imageURL, username];
   }
+
   let addedIdeaId;
   model.query(queryText1, queryValue1, async (err, result) => {
     if (err) {
@@ -114,12 +93,13 @@ ideaController.submitIdea = (req, res, next) => {
     // #TODO vvvv
     // GRACE: Concat queries into one before sending
     for (let i = 0; i < techStack.length; i += 1) {
-      queryText2 = `INSERT INTO Idea_tech_stacks (idea_id, tech_id) VALUES ($1, $2)`;
-      await model.query(queryText2, quertValue2[i], (err) => {
-        if (err) {
-          console.log(err);
+      queryText2 = 'INSERT INTO Idea_tech_stacks (idea_id, tech_id) VALUES ($1, $2)';
+      // eslint-disable-next-line no-await-in-loop
+      await model.query(queryText2, quertValue2[i], (error) => {
+        if (error) {
+          console.log(error);
           return next({
-            log: `error occurred at submitIdea middleware query2. error message is: ${err}`,
+            log: `error occurred at submitIdea middleware query2. error message is: ${error}`,
             status: 400,
             message: { err: 'An error occurred' },
           });
@@ -149,7 +129,7 @@ ideaController.getOneIdea = async (req, res, next) => {
     ON idea_participants.participant_username = users.username
     WHERE idea_id = ${id}`;
     const participants = await model.query(participantQueryText);
-    //will return array of objects
+    // will return array of objects
     res.locals.idea = { ...res.locals.idea, participants: participants.rows };
 
     const stackQueryText = `SELECT * FROM idea_tech_stacks 

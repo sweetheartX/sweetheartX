@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import Spinner from './Spinner';
-import '../styles/ideapage.scss';
 import { Container, Col, Row, Button } from 'react-bootstrap';
+import Spinner from '../components/Spinner';
+import '../styles/ideapage.scss';
 
-const IdeaPage = (props) => {
-  //passed in from Explore
-  let { idea_id, authStatus } = props.location.state;
+const IdeaPage = ({ location: { state } }) => {
+  // passed in from Explore
+  const { idea_id, authStatus } = state;
   const [ideaData, setIdeaData] = useState({});
   const [interested, setInterested] = useState(false);
 
@@ -22,14 +22,13 @@ const IdeaPage = (props) => {
 
   const handleInterestClick = async () => {
     setInterested(true);
-    //TODO: actually build out functionality to email/notify creator
+    // TODO: actually build out functionality to email/notify creator
   };
 
   if (!Object.keys(ideaData).length) return <Spinner />;
-  else if (ideaData.err)
-    return <Container id="idea-wrapper">Could not load idea</Container>;
+  if (ideaData.err) return <Container id="idea-wrapper">Could not load idea</Container>;
 
-  let {
+  const {
     name,
     description,
     why,
@@ -64,13 +63,9 @@ const IdeaPage = (props) => {
 
           <h4>WHEN</h4>
           <Container>
-            <h6>
-              Start Date: {when_start ? when_start.substring(0, 10) : undefined}
-            </h6>
+            <h6>Start Date: {when_start ? when_start.substring(0, 10) : undefined}</h6>
             {when_end ? (
-              <h6>
-                End Date: {when_end ? when_end.substring(0, 10) : undefined}
-              </h6>
+              <h6>End Date: {when_end ? when_end.substring(0, 10) : undefined}</h6>
             ) : undefined}
           </Container>
 
@@ -86,7 +81,7 @@ const IdeaPage = (props) => {
                     pathname: '/profile',
                     state: {
                       ideaCreator: creator_username,
-                      authStatus
+                      authStatus,
                     },
                   }}
                 >
@@ -120,22 +115,18 @@ const IdeaPage = (props) => {
           <Container>
             <Row className="mx-auto">
               {!interested ? (
-                <Button
-                  onClick={handleInterestClick}
-                  variant="info"
-                  className="m-2"
-                >
+                <Button className="m-2" variant="info" onClick={handleInterestClick}>
                   I'm Interested!
                 </Button>
               ) : (
-                  <Button disabled variant="info" className="m-2">
-                    Idea Creator Notified!
-                  </Button>
-                )}
+                <Button disabled className="m-2" variant="info">
+                  Idea Creator Notified!
+                </Button>
+              )}
             </Row>
             <Row className="mx-auto">
               <NavLink to="/explore">
-                <Button variant="primary" className="m-2">
+                <Button className="m-2" variant="primary">
                   Back to Explore
                 </Button>
               </NavLink>
