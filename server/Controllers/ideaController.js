@@ -109,7 +109,10 @@ ideaController.submitIdea = (req, res, next) => {
     for (let i = 0; i < techStack.length; i += 1) {
       quertValue2.push([addedIdeaId, techStack[i]]);
     }
+
     // console.log(techStack);
+    // #TODO vvvv
+    // GRACE: Concat queries into one before sending
     for (let i = 0; i < techStack.length; i += 1) {
       queryText2 = `INSERT INTO Idea_tech_stacks (idea_id, tech_id) VALUES ($1, $2)`;
       await model.query(queryText2, quertValue2[i], (err) => {

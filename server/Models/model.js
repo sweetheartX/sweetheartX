@@ -1,5 +1,5 @@
 const { Pool } = require('pg');
-require('dotenv').config();
+require('dotenv').config(); // REDUNDANT
 
 const PG_URI = process.env.elephantURI;
 

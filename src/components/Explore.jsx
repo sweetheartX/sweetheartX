@@ -81,7 +81,7 @@ const Explore = (props) => {
   //check if user wants to filter for tech, otherwise just return sortedIdeas as-is
   const filteredIdeas = techFilter.length
     ? sortedIdeas.filter((idea) => {
-      //if idea has tech that is inside techFilter, then include that idea
+      // if idea has tech that is inside techFilter, then include that idea
       for (let i = 0; i < techFilter.length; i++) {
         const selectedTech = techFilter[i];
         if (!idea.techstacks.includes(selectedTech)) return false;
@@ -164,6 +164,7 @@ const Explore = (props) => {
     </Container>
   );
 
+  // response[0].idea_id !== ''
   return response.length === 1 ? (
     <Spinner />
   ) : (

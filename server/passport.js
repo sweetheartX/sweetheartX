@@ -1,7 +1,8 @@
-const LocalStrategy = require('passport-local').Strategy;
-const model = require('./Models/model');
 const bcrypt = require('bcrypt');
-// to Authenticate with passport
+const model = require('./Models/model');
+const LocalStrategy = require('passport-local').Strategy;
+
+// Authenticate with passport
 const initialize = (passport) => {
 	const autheticateUser = (username, password, done) => {
 		//find same username in database

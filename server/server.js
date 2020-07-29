@@ -1,29 +1,35 @@
 const express = require('express');
 const path = require('path');
-
-const app = express();
-const cookieParser = require('cookie-parser');
-const bcrypt = require('bcrypt');
+const cookieParser = require('cookie-parser'); // UNUSED
+const bcrypt = require('bcrypt'); // UNUSED
 const session = require('express-session');
-const model = require('./Models/model');
+const flash = require('express-flash');
+const passport = require('passport');
+
+const model = require('./Models/model'); // UNUSED
+
 const signUpRouter = require('./Routers/signupRouter');
 const exploreRouter = require('./Routers/exploreRouter');
 const submitRouter = require('./Routers/submitRouter');
 const loginRouter = require('./Routers/loginRouter');
 const profileRouter = require('./Routers/profileRouter');
-const flash = require('express-flash');
+
 const initializePassport = require('./passport');
-const passport = require('passport');
-initializePassport(passport);
-require('dotenv').config();
+
+const app = express();
 const PORT = 3000;
 
-/*
- * Handle parsing request body
- */
+initializePassport(passport);
+require('dotenv').config();
+
+// Handle parsing request body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files
 app.use(express.static(path.resolve(__dirname, 'public')));
+
+// Session authentication
 app.use(
   session({
     secret: 'secret',
@@ -34,13 +40,15 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+
+// Routing
 app.use('/api/login', loginRouter);
 app.use('/api/signup', signUpRouter);
 app.use('/api/explore', exploreRouter);
 app.use('/api/submit', submitRouter);
 app.use('/api/profile', profileRouter);
 
-// globoal error handler
+// Global error handler
 app.use((err, req, res, next) => {
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
@@ -52,9 +60,7 @@ app.use((err, req, res, next) => {
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-/*
- * Start server
- */
+// Start server
 app.listen(PORT, () => {
   console.log(`Server listening on port: ${PORT}`);
 });
