@@ -8,6 +8,7 @@ import Profile from './pages/Profile';
 import NavigateBar from './pages/NavigateBar';
 import IdeaPage from './pages/IdeaPage';
 import SubmitIdea from './pages/SubmitIdea';
+import NoMatch from './pages/NoMatch'
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
 
 const App = () => {
@@ -41,6 +42,7 @@ const App = () => {
           <Route exact component={IdeaPage} path="/idea" />
           <Route exact path="/submit" render={() => <SubmitIdea authStatus={authStatus} />} />
           <Route exact path="/profile" render={() => <Profile authStatus={authStatus} />} />
+          <Route component={NoMatch}/>
         </Switch>
       </>
     </Router>
