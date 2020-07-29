@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const cookieParser = require('cookie-parser'); // UNUSED
 const bcrypt = require('bcrypt'); // UNUSED
 const session = require('express-session');
 const flash = require('express-flash');
@@ -35,7 +34,7 @@ app.use(
     secret: 'secret',
     resave: false,
     saveUninitialized: false,
-  })
+  }),
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -49,13 +48,14 @@ app.use('/api/submit', submitRouter);
 app.use('/api/profile', profileRouter);
 
 // Global error handler
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
     status: 400,
     message: { err: 'An error occurred' },
   };
-  const errorObj = Object.assign({}, defaultErr, err);
+  const errorObj = { ...defaultErr, ...err };
   console.log(errorObj.log);
   return res.status(errorObj.status).json(errorObj.message);
 });
