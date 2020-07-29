@@ -1,42 +1,43 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Navbar, Nav /* Form, FormControl, Button, Container */ } from 'react-bootstrap';
+import { Navbar, Nav } from 'react-bootstrap';
 
 const NavigateBar = () => (
   <Navbar bg="primary" variant="dark">
-    {/* Leftside Nav Logo/Link */}
     {/* TODO: Point this href to `/explore` if User is authenticated */}
     <Link to="/">
       <Navbar.Brand>Scratch Project</Navbar.Brand>
     </Link>
-    {/* Rightside Nav Links */}
+
     {/* Set class for Login and Signup button Nav item to `margin-left: auto;` */}
     <Nav className="ml-auto">
-      {/* TODO: Remove inline styling in favor of Bootstrap or separate stylesheet */}
+      {/* TODO: Remove inline styling in favor of separate stylesheet */}
 
-      {/* temporary link to render submit idea page */}
+      {/* nav-link class mimics styling without nesting anchor tags */}
       <Link to="/submit">
-        <Nav.Link href="/submit" style={{ color: 'white' }}>
+        <span className="nav-link" style={{ color: 'white' }}>
           Submit Idea
-        </Nav.Link>
+        </span>
       </Link>
       <Link to="/login">
-        <Nav.Link href="/login" style={{ color: 'white' }}>
+        <span className="nav-link" style={{ color: 'white' }}>
           Login
-        </Nav.Link>
+        </span>
       </Link>
       <Link to="/signup">
-        <Nav.Link href="/signup" style={{ color: 'white' }}>
+        <span className="nav-link" style={{ color: 'white' }}>
           Signup
-        </Nav.Link>
+        </span>
       </Link>
     </Nav>
   </Navbar>
 );
 
+// SAFE TO DELETE?
 // // Search Bar Component
 // < Form inline >
 //   <FormControl type="text" placeholder="Search" className="mr-sm-2" />
 //   <Button variant="outline-light">Search</Button>
 // </Form >
+
 export default NavigateBar;

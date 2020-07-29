@@ -18,6 +18,8 @@ const Login = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Pulled from state => copied out but not validated?
     const { username, password } = loginInputs;
     const body = {
       username,

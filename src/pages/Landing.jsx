@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
  * Push `path` to Landing component's destructured `history` prop
  * (provided by invoking withRouter on Landing component before export)
  */
+// TODO: Why is this used over normal <Link /> ?
 const redirectToPath = (history, path) => {
   history.push(path);
 };
