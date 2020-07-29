@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Col, Row, Form, Card, Button } from 'react-bootstrap';
+import { Container, Col, Row } from 'react-bootstrap';
 import axios from 'axios';
-import { NavLink } from 'react-router-dom';
 import Spinner from '../components/Spinner';
+import TechCheckbox from '../components/TechCheckbox';
+import DreamSearch from '../components/DreamSearch';
+import IdeaCard from '../components/IdeaCard';
 
-const Explore = (props) => {
-  const { authStatus } = props;
+const Explore = ({ authStatus }) => {
+  // For techFilter, if user checks off a tech, it gets added to array
+  const [techFilter, setTechFilter] = useState([]);
+  const [techList, setTechList] = useState([{ tech_id: '', name: '' }]);
+  const [query, setQuery] = useState('');
+  const [loaded, setLoaded] = useState(false);
   const [response, setResponse] = useState([
     {
       idea_id: '',
@@ -21,114 +27,42 @@ const Explore = (props) => {
     },
   ]);
 
-  const [query, setQuery] = useState('');
-  const [techList, setTechList] = useState([{ tech_id: '', name: '' }]);
-  // for sort by tech stack functionality, if user checks off a tech, it gets added to array
-  const [techFilter, setTechFilter] = useState([]);
-  const [loaded, setLoaded] = useState(false);
-
   useEffect(() => {
     const fetchData = async () => {
       const results = await axios.get('api/explore');
-      // console.log('results.data', results.data);
       setResponse(results.data[0]);
       setTechList(results.data[1]);
       setLoaded(true);
-      console.log('firing...');
-      // console.log(results.data[0]);
     };
 
     fetchData();
   }, []);
 
+  // On checkbox click: remove tech from filter list if already added, & vice versa
   const handleTechFilter = (e) => {
-    let newTechFilter;
-    if (techFilter.includes(e.target.value)) {
-      newTechFilter = techFilter.filter((tech) => tech !== e.target.value);
-    } else newTechFilter = [...techFilter, e.target.value];
+    const newTechFilter = techFilter.includes(e.target.value)
+      ? techFilter.filter((tech) => tech !== e.target.value)
+      : [...techFilter, e.target.value];
+
     setTechFilter(newTechFilter);
   };
 
-  // get technologies
-  const techStack = techList.map((tech) => tech.name);
-  // Generate checkbox component for each technology
-  const generateTech = techStack.map((tech, idx) => (
-    <Form key={idx}>
-      <div key="checkbox" className="mb-2 mt-2 ml-3">
-        <Form.Check type="checkbox">
-          <Form.Check.Input isValid type="checkbox" value={tech} onClick={handleTechFilter} />
-          <Form.Check.Label className="ml-2">
-            {' '}
-            <h4 style={{ color: '#5e93a5' }}>{tech}</h4>{' '}
-          </Form.Check.Label>
-        </Form.Check>
-      </div>
-    </Form>
-  ));
-
-  const onChange = (q) => setQuery(q);
-
-  const ideas = response;
-
-  const sortedIdeas = ideas.filter(
+  // If current query string is not a subtring of idea name, remove idea from render
+  let sortedIdeas = response.filter(
     (data) => data.name.toLowerCase().indexOf(query.toLowerCase()) !== -1,
   );
 
-  // check if user wants to filter for tech, otherwise just return sortedIdeas as-is
-  const filteredIdeas = techFilter.length
-    ? sortedIdeas.filter((idea) => {
-        // if idea has tech that is inside techFilter, then include that idea
-        for (let i = 0; i < techFilter.length; i++) {
-          const selectedTech = techFilter[i];
-          if (!idea.techstacks.includes(selectedTech)) return false;
-        }
-        return true;
-      })
-    : sortedIdeas;
-
-  const generateBoxes = filteredIdeas.map((idea, idx) => (
-    <Card key={idx} className="m-3" style={{ width: '20rem' }}>
-      <Card.Img src={idea.image} variant="top" />
-      <Card.Body>
-        <Card.Title>{idea.name}</Card.Title>
-        <Card.Text style={{ fontWeight: 300 }}>{idea.description}</Card.Text>
-        <Card.Text style={{ fontSize: 12, fontStyle: 'italic' }}>
-          <span style={{ fontSize: 13, fontWeight: 'bold' }}>Tech Stack: </span> <br />
-          {idea.techstacks.join(', ')}
-        </Card.Text>
-        <NavLink
-          to={{
-            pathname: '/idea',
-            state: {
-              idea_id: idea.idea_id,
-              authStatus,
-            },
-          }}
-        >
-          <Button variant="primary"> Find out more </Button>
-        </NavLink>
-      </Card.Body>
-    </Card>
-  ));
-
-  // Search box component
-  const searchIdea = (
-    <Form>
-      <Form.Group controlId="formBasicEmail">
-        <Form.Label>
-          {' '}
-          <h1>May your dream come true</h1>{' '}
-        </Form.Label>
-        <Form.Control
-          placeholder="Search your dream..."
-          size="lg"
-          type="text"
-          onChange={(e) => onChange(e.target.value)}
-        />
-        {/* <Button variant="primary" type="submit" className='mt-2'></Button> */}
-      </Form.Group>
-    </Form>
-  );
+  // Filter idea render array on selected tech stacks (if any)
+  const len = techFilter.length;
+  if (techFilter.length > 0) {
+    // Only include ideas that match ALL currently filtered tech stacks
+    sortedIdeas = sortedIdeas.filter((idea) => {
+      for (let i = 0; i < len; i += 1) {
+        if (!idea.techstacks.includes(techFilter[i])) return false;
+      }
+      return true;
+    });
+  }
 
   const explorePage = (
     <Container fluid>
@@ -141,18 +75,25 @@ const Explore = (props) => {
               Choose your tech stack:{' '}
             </h4>
           </Row>
-          <div className="">{generateTech}</div>
+          <div className="">
+            {techList.map(({ name }) => (
+              <TechCheckbox key={name} name={name} onTechFilter={handleTechFilter} />
+            ))}
+          </div>
         </Col>
 
         <Col className="mt-4" lg={9}>
-          {searchIdea}
-          <Row>{generateBoxes}</Row>
+          <DreamSearch onChange={(e) => setQuery(e.target.value)} />
+          <Row>
+            {sortedIdeas.map((idea) => (
+              <IdeaCard key={idea.idea_id} authStatus={authStatus} idea={idea} />
+            ))}
+          </Row>
         </Col>
       </Row>
     </Container>
   );
 
-  // return response.length === 1 ? <Spinner /> : <> {explorePage} </>;
   return !loaded ? <Spinner /> : <> {explorePage} </>;
 };
 
