@@ -1,18 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
-import { withRouter } from 'react-router-dom';
 
-/*
- * HELPER FUNCTION: nextPath
- * Push `path` to Landing component's destructured `history` prop
- * (provided by invoking withRouter on Landing component before export)
- */
-// TODO: Why is this used over normal <Link /> ?
-const redirectToPath = (history, path) => {
-  history.push(path);
-};
-
-const Landing = ({ history }) => (
+const Landing = () => (
   <Container fluid className="container">
     <div className="mt-5">
       <h1 className="d-flex justify-content-center"> Welcome to sweetheartX </h1>
@@ -24,17 +14,13 @@ const Landing = ({ history }) => (
       <br />
     </div>
     <div className="mt-5 d-flex justify-content-center">
-      <Button
-        block
-        className="w-25"
-        size="lg"
-        variant="outline-primary"
-        onClick={() => redirectToPath(history, '/explore')}
-      >
-        Start Exploring
-      </Button>
+      <Link to="/explore">
+        <Button size="lg" variant="outline-primary">
+          Start Exploring
+        </Button>
+      </Link>
     </div>
   </Container>
 );
 
-export default withRouter(Landing);
+export default Landing;

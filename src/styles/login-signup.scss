@@ -7,6 +7,15 @@
   align-items: center;
 }
 
+.signup-container {
+  margin-top: 50px;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .login-box {
   border: 1px solid black;
   border-radius: 8px;
