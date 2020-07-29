@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Col, Row } from 'react-bootstrap';
+import { Container, Col, Row, Button } from 'react-bootstrap';
 import Spinner from '../components/Spinner';
 import '../styles/user-profile.scss';
 
@@ -14,10 +14,7 @@ const Profile = (props) => {
 
   // Destructure currently authenticated user's username from authStatus
   const { username } = authStatus;
-
-  // Initialize creator name-to-display to currently authenticated user
-  let creatorName = username;
-
+  const creatorName = username;
   // Accessing Profile from Idea Page?
   if (ideaCreator) {
     console.log('idea creator is : ', ideaCreator);
@@ -73,6 +70,7 @@ const Profile = (props) => {
           src="https://www.clker.com/cliparts/Z/j/o/Z/g/T/turquoise-anonymous-man-hi.png"
         />
       </Row>
+      <Button type="submit">Edit Profile</Button>
       <Row id="row2">
         <Col className="cardHeader" id="bioCard">
           <>Bio</>
