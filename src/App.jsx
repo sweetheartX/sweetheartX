@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Landing from './pages/Landing';
-import Messages from './pages/Messages'
+import Messages from './pages/Messages';
 import Explore from './pages/Explore';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
-import EditProfile from './pages/EditProfile'
+import EditProfile from './pages/EditProfile';
 import NavigateBar from './pages/NavigateBar';
 import IdeaPage from './pages/IdeaPage';
 import SubmitIdea from './pages/SubmitIdea';
@@ -53,8 +53,8 @@ const App = () => {
             path="/signup"
             render={() => <Signup authStatus={authStatus} setAuthStatus={setAuthStatus} />}
           />
-          <Route exact path="/explore" render={() => <Explore authStatus={authStatus} />} />
-          <Route exact component={IdeaPage} path="/idea" />
+          <Route exact path="/explore" render={() => <Explore />} />
+          <Route exact authStatus={authStatus} component={IdeaPage} path="/idea/:id" />
           <Route exact path="/messages" render={() => <Messages authStatus={authStatus} />} />
           <Route exact path="/submit" render={() => <SubmitIdea authStatus={authStatus} />} />
           <Route exact path="/profile" render={() => <Profile authStatus={authStatus} />} />
