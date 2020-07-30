@@ -4,30 +4,34 @@ import { Container, Col, Row, Button } from 'react-bootstrap';
 import Spinner from '../components/Spinner';
 import '../styles/ideapage.scss';
 
-const IdeaPage = ({ location: { state } }) => {
-  // passed in from Explore
-  const { idea_id, authStatus } = state;
-  const [ideaData, setIdeaData] = useState({});
+const IdeaPage = ({ match, authStatus }) => {
+  const { id } = match.params;
+  const [ideaData, setIdeaData] = useState(null);
   const [interested, setInterested] = useState(false);
 
   useEffect(() => {
+    const getIdea = async () => {
+      const res = await fetch(`/api/explore/${id}`);
+      const parsedIdea = await res.json();
+      setIdeaData(parsedIdea);
+    };
+
     getIdea();
   }, []);
 
-  const getIdea = async () => {
-    const res = await fetch(`/api/explore/${idea_id}`);
-    const parsed = await res.json();
-    setIdeaData(parsed);
-  };
-
   const handleInterestClick = async () => {
     setInterested(true);
+    // SHOULD: fire post request with idea & user info
     // TODO: actually build out functionality to email/notify creator
   };
 
-  if (!Object.keys(ideaData).length) return <Spinner />;
+  // LOADING SPINNER WHILE FETCH REQUEST PENDING
+  if (!ideaData) return <Spinner />;
+
+  // ERROR HANDLER FOR IDEA FETCH
   if (ideaData.err) return <Container id="idea-wrapper">Could not load idea</Container>;
 
+  // RENDER ON SUCCESFUL IDEA FETCH
   const {
     name,
     description,
@@ -55,18 +59,16 @@ const IdeaPage = ({ location: { state } }) => {
           </Container>
           <Container>
             <ul>
-              {techStacks.map((stack, idx) => (
-                <li key={idx}>{stack.name}</li>
+              {techStacks.map((stack) => (
+                <li key={stack.name}>{stack.name}</li>
               ))}
             </ul>
           </Container>
 
           <h4>WHEN</h4>
           <Container>
-            <h6>Start Date: {when_start ? when_start.substring(0, 10) : undefined}</h6>
-            {when_end ? (
-              <h6>End Date: {when_end ? when_end.substring(0, 10) : undefined}</h6>
-            ) : undefined}
+            <h6>Start Date: {when_start ? when_start.substring(0, 10) : 'not specified'}</h6>
+            {when_end ? <h6>End Date: {when_end.substring(0, 10)}</h6> : null}
           </Container>
 
           <h4>WHO</h4>
@@ -76,6 +78,7 @@ const IdeaPage = ({ location: { state } }) => {
             <ul>
               <li className="unstyled-li">
                 {/* TODO:CONVERT THE PROFILE PIC IN SCHEMA TO STRING */}
+                {/* REFACTOR to url param */}
                 <NavLink
                   to={{
                     pathname: '/profile',
@@ -85,13 +88,13 @@ const IdeaPage = ({ location: { state } }) => {
                     },
                   }}
                 >
-                  <img className="prof-pic" src={profilepic} />
+                  <img alt="avatar" className="prof-pic" src={profilepic} />
                 </NavLink>
                 {creator_username} (creator)
               </li>
-              {participants.map((user, idx) => (
-                <li key={idx} className="unstyled-li">
-                  <img className="prof-pic" src={user.profilepic} />
+              {participants.map((user) => (
+                <li key={user.username} className="unstyled-li">
+                  <img alt="avatar" className="prof-pic" src={user.profilepic} />
                   {user.username}
                 </li>
               ))}
@@ -109,7 +112,7 @@ const IdeaPage = ({ location: { state } }) => {
             </Col>
           </Row>
           <Row>
-            <img className="mx-auto" id="idea-pic" src={image} />
+            <img alt="project branding" className="mx-auto" id="idea-pic" src={image} />
           </Row>
 
           <Container>
