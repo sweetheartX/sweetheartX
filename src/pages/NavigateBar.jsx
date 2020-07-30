@@ -3,41 +3,55 @@ import { Link } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 
 // need to figure out how to hide/show certain buttons dependent on user's page status
-const NavigateBar = () => (
-  <Navbar bg="primary" variant="dark">
-    {/* TODO: Point this href to `/explore` if User is authenticated */}
-    <Link to="/">
-      <Navbar.Brand>Scratch Project</Navbar.Brand>
-    </Link>
+const NavigateBar = ({ authStatus }) => {
+  const { isLoggedIn, username } = authStatus;
+  const logoRedirect = isLoggedIn ? '/explore' : '/';
 
-    {/* Set class for Login and Signup button Nav item to `margin-left: auto;` */}
-    <Nav className="ml-auto">
-      {/* TODO: Remove inline styling in favor of separate stylesheet */}
+  const styles = { color: 'white' };
 
-      {/* nav-link class mimics styling without nesting anchor tags */}
-      <Link to="/submit">
-        <span className="nav-link" style={{ color: 'white' }}>
-          Submit Idea
-        </span>
+  return (
+    <Navbar bg="primary" variant="dark">
+      {/* TODO: Point this href to `/explore` if User is authenticated */}
+      <Link to={logoRedirect}>
+        <Navbar.Brand>Scratch Project</Navbar.Brand>
       </Link>
-      <Link to="/login">
-        <span className="nav-link" style={{ color: 'white' }}>
-          Login
-        </span>
-      </Link>
-      <Link to="/signup">
-        <span className="nav-link" style={{ color: 'white' }}>
-          Signup
-        </span>
-      </Link>
-      <Link to="/profile">
-        <span className="nav-link" style={{ color: 'white' }}>
-          Profile
-        </span>
-      </Link>
-    </Nav>
-  </Navbar>
-);
+
+      {/* Set class for Login and Signup button Nav item to `margin-left: auto;` */}
+      <Nav className="ml-auto">
+        {/* TODO: Remove inline styling in favor of separate stylesheet */}
+        {/* nav-link class mimics styling without nesting anchor tags */}
+        {isLoggedIn ? (
+          <>
+            <Navbar.Text style={{ fontStyle: 'italic' }}>Welcome, {username}!</Navbar.Text>
+            <Link to="/submit">
+              <span className="nav-link" style={styles}>
+                Submit Idea
+              </span>
+            </Link>
+            <Link to="/profile">
+              <span className="nav-link" style={styles}>
+                Profile
+              </span>
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link to="/login">
+              <span className="nav-link" style={styles}>
+                Login
+              </span>
+            </Link>
+            <Link to="/signup">
+              <span className="nav-link" style={styles}>
+                Signup
+              </span>
+            </Link>
+          </>
+        )}
+      </Nav>
+    </Navbar>
+  );
+};
 
 // SAFE TO DELETE?
 // // Search Bar Component
