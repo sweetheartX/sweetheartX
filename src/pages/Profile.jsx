@@ -67,6 +67,7 @@ const Profile = (props) => {
       <Row className="mb-4" id="row1">
         <h3>{creatorName}'s Developer Profile</h3>
         <img
+          alt="profile pic"
           id="profilePic"
           src="https://www.clker.com/cliparts/Z/j/o/Z/g/T/turquoise-anonymous-man-hi.png"
         />
@@ -74,10 +75,10 @@ const Profile = (props) => {
       <Link to="/editprofile">Edit Profile</Link>
       <Row id="row2">
         <Col className="cardHeader" id="bioCard">
-          <>Bio</>
+          Bio
         </Col>
         <Col className="cardHeader ml-5" id="contactInfoCard">
-          <>Where else can your future teammates contact you?</>
+          Where else can your future teammates contact you?
         </Col>
       </Row>
     </Container>
