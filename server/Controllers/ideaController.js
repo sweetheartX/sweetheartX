@@ -4,7 +4,7 @@ const model = require('../Models/model.js');
 const ideaController = {};
 
 // middleware to get all ideas data from database
-ideaController.getIdeas = (req, res, next) => {
+ideaController.getIdeas = async (req, res, next) => {
   // query text will join tables for ideas, idea_tech_stacks, and tech_stacks
   // then aggregate the tech stack names into an array
   const queryText = `SELECT Ideas.*, array_agg(tech_stacks.name) AS techstacks FROM Ideas 
@@ -12,31 +12,28 @@ ideaController.getIdeas = (req, res, next) => {
     JOIN tech_stacks ON tech_stacks.tech_id=Idea_tech_stacks.tech_id 
     GROUP BY Ideas.idea_id`;
 
-  model.query(queryText, (err, results) => {
-    if (err) {
-      console.log(err);
-      return next({
-        log: `error occurred at getIdeas middleware. error message is: ${err}`,
-        status: 400,
-        message: { err: 'An error occurred' },
-      });
-    }
-    // console.log('results', results.rows);
-    res.locals.ideas = results.rows;
+  try {
+    const { rows } = await model.query(queryText);
+    res.locals.ideas = rows;
     return next();
-  });
+  } catch (err) {
+    return next({
+      log: `error occurred at getIdeas middleware. error message is: ${err}`,
+      status: 400,
+      message: { err: 'An error occurred' },
+    });
+  }
 };
 
-// INSERT INTO Ideas (name, description, why, when_start, when_end, who, image, creator_username) VALUES ('scratch', 'scratch project', 'for fun', '2020-07-25', '2020-08-15', '3', 'image.png', 'hello1');
-
-// we need to know who's submitting the idea
 ideaController.submitIdea = async (req, res, next) => {
   const { name, description, why, techStack, whenStart, imageURL, username } = req.body;
-
   let { whenEnd, teamNumber } = req.body;
 
-  teamNumber = Number(teamNumber);
+  // If number of teammates is NaN, default to 1
+  teamNumber = Number(teamNumber) || 1;
   whenEnd = whenEnd || null;
+
+  // Only include image in statement if specified; else use default
   const imgCol = imageURL ? ', image' : '';
   const imgVal = imageURL ? ', $8' : '';
   const queryText1 = `INSERT INTO Ideas (name, description, why, when_start, when_end, who, creator_username${imgCol}) VALUES ($1, $2, $3, $4, $5, $6, $7${imgVal}) RETURNING idea_id`;
@@ -49,16 +46,12 @@ ideaController.submitIdea = async (req, res, next) => {
 
     // separate query to insert tech stacks into idea_tech_stacks
     let queryText2 = '';
-    const queryValue2 = [];
-    for (let i = 0; i < techStack.length; i += 1) {
-      queryValue2.push(addedIdeaId, techStack[i]);
+    const len = techStack.length;
+    for (let i = 0; i < len; i += 1) {
+      queryText2 += `INSERT INTO Idea_tech_stacks (idea_id, tech_id) VALUES (${addedIdeaId}, ${techStack[i]}); `;
     }
 
-    for (let i = 1; i <= queryValue2.length; i += 2) {
-      queryText2 += `INSERT INTO Idea_tech_stacks (idea_id, tech_id) VALUES ($${i}, $${i + 1}); `;
-    }
-
-    await model.query(queryText2, queryValue2);
+    await model.query(queryText2);
     return next();
   } catch (err) {
     return next({ log: err });

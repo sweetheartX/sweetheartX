@@ -22,6 +22,11 @@ authController.register = async (req, res, next) => {
   }
 };
 
+authController.getUser = (req, res, next) => {
+  res.locals.username = req.user ? req.user.username : null;
+  return next();
+};
+
 // TODO : new columns in the Users table, about, linkedin, personal url
 // new table to link users to tech stack(association table),
 // signup new fields for firstname and lastname
