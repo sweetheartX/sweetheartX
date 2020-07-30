@@ -5,7 +5,7 @@ const model = require('./Models/model');
 // Authenticate with passport
 const initialize = (passport) => {
   // TODO: REFACTOR TO ASYNC / AWAIT
-  const autheticateUser = (username, password, done) => {
+  const authenticateUser = (username, password, done) => {
     // Find same username in database
     model.query(
       'SELECT * FROM User_credentials WHERE username = $1',
@@ -48,7 +48,7 @@ const initialize = (passport) => {
         usernameField: 'username',
         passwordField: 'password',
       },
-      autheticateUser,
+      authenticateUser,
     ),
   );
 
@@ -66,7 +66,7 @@ const initialize = (passport) => {
           console.log(err, 'deserializeUser error');
           return null;
         }
-
+        // console.log(results.rows[0]);
         return done(null, results.rows[0]);
       },
     );

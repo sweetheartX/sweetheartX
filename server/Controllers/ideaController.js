@@ -83,29 +83,22 @@ ideaController.submitIdea = (req, res, next) => {
     addedIdeaId = result.rows[0].idea_id;
 
     // separate query to insert tech stacks into idea_tech_stacks
-    let queryText2;
-    const quertValue2 = [];
+    let quertValue2 = '';
     for (let i = 0; i < techStack.length; i += 1) {
-      quertValue2.push([addedIdeaId, techStack[i]]);
+      quertValue2 += `INSERT INTO Idea_tech_stacks (idea_id, tech_id) VALUES (${addedIdeaId}, ${techStack[i]}); `;
     }
+    // console.log('quertValue2', quertValue2);
 
-    // console.log(techStack);
-    // #TODO vvvv
-    // GRACE: Concat queries into one before sending
-    for (let i = 0; i < techStack.length; i += 1) {
-      queryText2 = 'INSERT INTO Idea_tech_stacks (idea_id, tech_id) VALUES ($1, $2)';
-      // eslint-disable-next-line no-await-in-loop
-      await model.query(queryText2, quertValue2[i], (error) => {
-        if (error) {
-          console.log(error);
-          return next({
-            log: `error occurred at submitIdea middleware query2. error message is: ${error}`,
-            status: 400,
-            message: { err: 'An error occurred' },
-          });
-        }
-      });
-    }
+    await model.query(quertValue2, (error) => {
+      if (error) {
+        console.log(error);
+        return next({
+          log: `error occurred at submitIdea middleware query2. error message is: ${error}`,
+          status: 400,
+          message: { err: 'An error occurred' },
+        });
+      }
+    });
     return next();
   });
 };

@@ -3,6 +3,9 @@ const path = require('path');
 const session = require('express-session');
 const flash = require('express-flash');
 const passport = require('passport');
+const PostgreSqlStore = require('connect-pg-simple')(session);
+
+const { PG_URI } = process.env;
 
 require('dotenv').config();
 
@@ -19,6 +22,24 @@ const PORT = 3000;
 
 initializePassport(passport);
 
+app.use(
+  session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+    // store: new PostgreSqlStore({
+    //   conString: PG_URI,
+    // }),
+    cookie: {
+      maxAge: 3500000,
+    },
+    // genid: (req) => {
+    //   console.log('inside the session middleware');
+    //   console.log(req.sessionID);
+    // },
+  }),
+);
+
 // Handle parsing request body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,13 +48,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../dist')));
 
 // Session authentication
-app.use(
-  session({
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: false,
-  }),
-);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -45,8 +59,10 @@ app.use('/api/explore', exploreRouter);
 app.use('/api/submit', submitRouter);
 app.use('/api/profile', profileRouter);
 
-// Global error handler
-// eslint-disable-next-line no-unused-vars
+// 404 catch all error handler
+app.use('*', (req, res) => res.sendStatus(404));
+
+// globoal error handler
 app.use((err, req, res, next) => {
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
