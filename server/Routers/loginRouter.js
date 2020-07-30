@@ -5,7 +5,7 @@ const router = express.Router();
 
 // Find & compare user for login
 router.post('/', passport.authenticate('local'), (req, res) => {
-  res.status(200);
+  res.sendStatus(200);
 });
 
 module.exports = router;
