@@ -1,11 +1,9 @@
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
-const flash = require('express-flash');
 const passport = require('passport');
-const PostgreSqlStore = require('connect-pg-simple')(session);
-
-const { PG_URI } = process.env;
+const LocalStrategy = require('passport-local').Strategy;
+const PgStore = require('connect-pg-simple')(session);
 
 require('dotenv').config();
 
@@ -14,43 +12,41 @@ const exploreRouter = require('./Routers/exploreRouter');
 const submitRouter = require('./Routers/submitRouter');
 const loginRouter = require('./Routers/loginRouter');
 const profileRouter = require('./Routers/profileRouter');
+const sessionRouter = require('./Routers/sessionRouter');
 
-const initializePassport = require('./passport');
+// PASSPORT
+const { authenticateUser, serializeUser, deserializeUser } = require('./passport.js');
 
+passport.use(new LocalStrategy(authenticateUser));
+passport.serializeUser(serializeUser);
+passport.deserializeUser(deserializeUser);
+
+// LAUNCH APP
+const { PG_URI, SESSION_SECRET } = process.env;
 const app = express();
 const PORT = 3000;
-
-initializePassport(passport);
-
-app.use(
-  session({
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: true,
-    // store: new PostgreSqlStore({
-    //   conString: PG_URI,
-    // }),
-    cookie: {
-      maxAge: 3500000,
-    },
-    // genid: (req) => {
-    //   console.log('inside the session middleware');
-    //   console.log(req.sessionID);
-    // },
-  }),
-);
 
 // Handle parsing request body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files
-app.use(express.static(path.join(__dirname, '../dist')));
+// SESSION
+app.use(
+  session({
+    store: new PgStore({ conString: PG_URI }),
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 1 Day
+  }),
+);
 
 // Session authentication
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash());
+
+// Serve static files
+app.use(express.static(path.join(__dirname, '../dist')));
 
 // Routing
 app.use('/api/login', loginRouter);
@@ -58,11 +54,13 @@ app.use('/api/signup', signUpRouter);
 app.use('/api/explore', exploreRouter);
 app.use('/api/submit', submitRouter);
 app.use('/api/profile', profileRouter);
+app.use('/api/session', sessionRouter);
 
 // 404 catch all error handler
 app.use('*', (req, res) => res.sendStatus(404));
 
 // globoal error handler
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
