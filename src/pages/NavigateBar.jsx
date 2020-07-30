@@ -30,6 +30,11 @@ const NavigateBar = () => (
           Signup
         </span>
       </Link>
+      <Link to="/messages">
+        <span className="nav-link" style={{ color: 'white' }}>
+          Messages
+        </span>
+      </Link>
       <Link to="/profile">
         <span className="nav-link" style={{ color: 'white' }}>
           Profile
