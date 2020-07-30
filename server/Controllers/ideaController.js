@@ -30,87 +30,41 @@ ideaController.getIdeas = (req, res, next) => {
 // INSERT INTO Ideas (name, description, why, when_start, when_end, who, image, creator_username) VALUES ('scratch', 'scratch project', 'for fun', '2020-07-25', '2020-08-15', '3', 'image.png', 'hello1');
 
 // we need to know who's submitting the idea
-ideaController.submitIdea = (req, res, next) => {
-  const {
-    name,
-    description,
-    why,
-    techStack,
-    whenStart,
-    whenEnd,
-    teamNumber,
-    imageURL,
-    username,
-  } = req.body;
+ideaController.submitIdea = async (req, res, next) => {
+  const { name, description, why, techStack, whenStart, imageURL, username } = req.body;
 
-  const teamNumberInt = Number(teamNumber);
+  let { whenEnd, teamNumber } = req.body;
 
-  // will need to get user's username (may need to modify database to grab user_id instead...)
-  // front end to modify date to following format YYYY-MM-DD
-  // if dateEnd is not given, front end to assign it as null
+  teamNumber = Number(teamNumber);
+  whenEnd = whenEnd || null;
+  const imgCol = imageURL ? ', image' : '';
+  const imgVal = imageURL ? ', $8' : '';
+  const queryText1 = `INSERT INTO Ideas (name, description, why, when_start, when_end, who, creator_username${imgCol}) VALUES ($1, $2, $3, $4, $5, $6, $7${imgVal}) RETURNING idea_id`;
+  const queryValue1 = [name, description, why, whenStart, whenEnd, teamNumber, username];
+  if (imageURL) queryValue1.push(imageURL);
 
-  // if imageurl or endDate is falsy, then we have to omit from query text/value so that it will default to default image or date(null)
-  let queryText1;
-  let queryValue1;
-  if (!whenEnd && !imageURL) {
-    queryText1 =
-      'INSERT INTO Ideas (name, description, why, when_start, who, creator_username) VALUES ($1, $2, $3, $4, $5, $6) RETURNING idea_id';
-    queryValue1 = [name, description, why, whenStart, teamNumberInt, username];
-  } else if (!imageURL) {
-    queryText1 =
-      'INSERT INTO Ideas (name, description, why, when_start, when_end, who, creator_username) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING idea_id';
-    queryValue1 = [name, description, why, whenStart, whenEnd, teamNumberInt, username];
-  } else if (!whenEnd) {
-    queryText1 =
-      'INSERT INTO Ideas (name, description, why, when_start, who, image, creator_username) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING idea_id';
-    queryValue1 = [name, description, why, whenStart, teamNumberInt, imageURL, username];
-  } else {
-    queryText1 =
-      'INSERT INTO Ideas (name, description, why, when_start, when_end, who, image, creator_username) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING idea_id';
-    queryValue1 = [name, description, why, whenStart, whenEnd, teamNumberInt, imageURL, username];
-  }
-
-  let addedIdeaId;
-  model.query(queryText1, queryValue1, async (err, result) => {
-    if (err) {
-      console.log(err);
-      return next({
-        log: `error occurred at submitIdea middleware query1. error message is: ${err}`,
-        status: 400,
-        message: { err: 'An error occurred' },
-      });
-    }
-    addedIdeaId = result.rows[0].idea_id;
+  try {
+    const result = await model.query(queryText1, queryValue1);
+    const addedIdeaId = result.rows[0].idea_id;
 
     // separate query to insert tech stacks into idea_tech_stacks
-    let queryText2;
-    const quertValue2 = [];
+    let queryText2 = '';
+    const queryValue2 = [];
     for (let i = 0; i < techStack.length; i += 1) {
-      quertValue2.push([addedIdeaId, techStack[i]]);
+      queryValue2.push(addedIdeaId, techStack[i]);
     }
 
-    // console.log(techStack);
-    // #TODO vvvv
-    // GRACE: Concat queries into one before sending
-    for (let i = 0; i < techStack.length; i += 1) {
-      queryText2 = 'INSERT INTO Idea_tech_stacks (idea_id, tech_id) VALUES ($1, $2)';
-      // eslint-disable-next-line no-await-in-loop
-      await model.query(queryText2, quertValue2[i], (error) => {
-        if (error) {
-          console.log(error);
-          return next({
-            log: `error occurred at submitIdea middleware query2. error message is: ${error}`,
-            status: 400,
-            message: { err: 'An error occurred' },
-          });
-        }
-      });
+    for (let i = 1; i <= queryValue2.length; i += 2) {
+      queryText2 += `INSERT INTO Idea_tech_stacks (idea_id, tech_id) VALUES ($${i}, $${i + 1}); `;
     }
+
+    await model.query(queryText2, queryValue2);
     return next();
-  });
+  } catch (err) {
+    return next({ log: err });
+  }
 };
 
-// middleware to get one idea
 // need to set up route for this
 ideaController.getOneIdea = async (req, res, next) => {
   const id = req.params.ideaID;
