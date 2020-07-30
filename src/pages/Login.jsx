@@ -58,7 +58,7 @@ const Login = ({ authStatus, setAuthStatus }) => {
             <Form.Control placeholder="Password" type="password" onChange={handlePassword} />
           </Form.Group>
 
-          <Button type="submit" variant="primary" onClick={handleSubmit}>
+          <Button type="submit" variant="danger" onClick={handleSubmit}>
             Submit
           </Button>
 

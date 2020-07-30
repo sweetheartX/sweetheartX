@@ -72,18 +72,28 @@ const Signup = (props) => {
             <Form.Control required placeholder="Username" type="username" onChange={setInput} />
           </Form.Group>
           <Row>
-          <Col>
-          <Form.Group controlId="firstname">
-            <Form.Label>First Name</Form.Label>
-            <Form.Control required placeholder="First Name" type="firstname" onChange={setInput} />
-          </Form.Group>
-          </Col>
-          <Col>
-          <Form.Group controlId="lastname">
-            <Form.Label>Last Name</Form.Label>
-            <Form.Control required placeholder="Last Name" type="lastname" onChange={setInput} />
-          </Form.Group>
-          </Col>
+            <Col>
+              <Form.Group controlId="firstname">
+                <Form.Label>First Name</Form.Label>
+                <Form.Control
+                  required
+                  placeholder="First Name"
+                  type="firstname"
+                  onChange={setInput}
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group controlId="lastname">
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control
+                  required
+                  placeholder="Last Name"
+                  type="lastname"
+                  onChange={setInput}
+                />
+              </Form.Group>
+            </Col>
           </Row>
 
           <Form.Group controlId="email">
@@ -93,25 +103,25 @@ const Signup = (props) => {
 
           <Row>
             <Col>
-          <Form.Group controlId="password">
-            <Form.Label>Password</Form.Label>
-            <Form.Control required placeholder="Password" type="password" onChange={setInput} />
-          </Form.Group>
-          </Col>
-          <Col>
-          <Form.Group controlId="confirmPassword">
-            <Form.Label>Confirm Password</Form.Label>
-            <Form.Control
-              required
-              placeholder="Confirm Password"
-              type="password"
-              onChange={setInput}
-            />
-          </Form.Group>
-          </Col>
+              <Form.Group controlId="password">
+                <Form.Label>Password</Form.Label>
+                <Form.Control required placeholder="Password" type="password" onChange={setInput} />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group controlId="confirmPassword">
+                <Form.Label>Confirm Password</Form.Label>
+                <Form.Control
+                  required
+                  placeholder="Confirm Password"
+                  type="password"
+                  onChange={setInput}
+                />
+              </Form.Group>
+            </Col>
           </Row>
 
-          <Button type="submit" variant="primary">
+          <Button type="submit" variant="danger">
             Submit
           </Button>
         </Form>

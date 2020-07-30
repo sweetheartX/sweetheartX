@@ -1,5 +1,6 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
+import '../styles/checkbox.scss';
 
 const TechCheckbox = ({ name, onTechFilter }) => (
   <Form key={name}>
@@ -7,8 +8,7 @@ const TechCheckbox = ({ name, onTechFilter }) => (
       <Form.Check type="checkbox">
         <Form.Check.Input isValid type="checkbox" value={name} onClick={onTechFilter} />
         <Form.Check.Label className="ml-2">
-          {' '}
-          <h4 style={{ color: '#5e93a5' }}>{name}</h4>{' '}
+          <h4 id="boxText">&nbsp;{name}</h4>
         </Form.Check.Label>
       </Form.Check>
     </div>
