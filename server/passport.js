@@ -28,7 +28,6 @@ module.exports = {
   },
 
   serializeUser: (user, done) => {
-    console.log(`SERIALIZE: ${user}`);
     done(null, user.username);
   },
 
