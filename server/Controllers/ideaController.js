@@ -58,7 +58,6 @@ ideaController.submitIdea = async (req, res, next) => {
   }
 };
 
-// middleware to get one idea
 // need to set up route for this
 ideaController.getOneIdea = async (req, res, next) => {
   const id = req.params.ideaID;
