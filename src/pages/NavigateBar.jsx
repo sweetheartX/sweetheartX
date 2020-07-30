@@ -10,10 +10,10 @@ const NavigateBar = ({ authStatus }) => {
   const styles = { color: 'white' };
 
   return (
-    <Navbar bg="primary" variant="dark">
+    <Navbar bg="danger" variant="dark">
       {/* TODO: Point this href to `/explore` if User is authenticated */}
       <Link to={logoRedirect}>
-        <Navbar.Brand>Scratch Project</Navbar.Brand>
+        <Navbar.Brand>sweetheartX</Navbar.Brand>
       </Link>
 
       {/* Set class for Login and Signup button Nav item to `margin-left: auto;` */}
