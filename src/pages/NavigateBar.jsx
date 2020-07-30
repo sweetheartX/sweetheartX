@@ -33,6 +33,11 @@ const NavigateBar = ({ authStatus }) => {
                 Profile
               </span>
             </Link>
+            <Link to="/messages">
+              <span className="nav-link" style={{ color: 'white' }}>
+                Messages
+              </span>
+            </Link>
           </>
         ) : (
           <>

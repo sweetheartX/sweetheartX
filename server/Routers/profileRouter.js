@@ -9,4 +9,9 @@ router.get('/:username', authController.getProfile, (req, res) => {
   res.json(res.locals.userData);
 });
 
+// Updates profile data when user submits form 
+router.get('/:username/edit', authController.editProfile, (req, res) => {
+  // console.log('res.locals.ideas', res.locals.ideas);
+  res.status(200).send('Profile successfully updated')
+});
 module.exports = router;

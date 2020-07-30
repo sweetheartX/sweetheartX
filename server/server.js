@@ -7,6 +7,8 @@ const PgStore = require('connect-pg-simple')(session);
 
 require('dotenv').config();
 
+const http = require('http'); 
+const socket = require('socket.io');
 const signUpRouter = require('./Routers/signupRouter');
 const exploreRouter = require('./Routers/exploreRouter');
 const submitRouter = require('./Routers/submitRouter');
@@ -26,6 +28,14 @@ const { PG_URI, SESSION_SECRET } = process.env;
 const app = express();
 const PORT = 3000;
 
+// imports used by socket.io
+const server = http.createServer(app);
+const io = socket(server);
+// import functions from message room manager
+const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
+
+
+// initializePassport(passport);
 // Handle parsing request body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -40,6 +50,46 @@ app.use(
     cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 1 Day
   }),
 );
+
+// socket logic - add middleware, move to another file? *name is username
+io.on('connection', (socket) => {
+  socket.on('join', ({ name, room }, callback) => {
+    // add user to room manager using socket ID
+    const { error, user } = addUser({ id: socket.id, name, room });
+
+    if (error) return callback(error);
+
+    socket.join(user.room); // joins user to room
+    socket.emit('message', {
+      user: 'admin',
+      text: `Hi, ${user.name}, you are now in room ${user.room}!`,
+    });
+    socket.broadcast
+      .to(user.room)
+      .emit('message', { user: 'admin', text: `${user.name} has joined!` });
+  });
+
+  socket.on('sendMessage', (message, callback) => {
+    const user = getUser(socket.id);
+
+    io.to(user.room).emit('message', { user: user.name, text: message });
+    // io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
+
+    callback();
+  });
+
+  socket.on('disconnect', () => {
+    const user = removeUser(socket.id);
+
+    if (user) {
+      io.to(user.room).emit('message', { user: 'Admin', text: `${user.name} has left.` });
+      io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
+    }
+  });
+});
+
+// Serve static files
+app.use(express.static(path.join(__dirname, '../dist')));
 
 // Session authentication
 app.use(passport.initialize());
@@ -73,7 +123,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server listening on port: ${PORT}`);
 });
 

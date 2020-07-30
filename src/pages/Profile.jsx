@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Container, Col, Row, Button } from 'react-bootstrap';
 import Spinner from '../components/Spinner';
 import '../styles/user-profile.scss';
@@ -71,7 +72,7 @@ const Profile = (props) => {
           src="https://www.clker.com/cliparts/Z/j/o/Z/g/T/turquoise-anonymous-man-hi.png"
         />
       </Row>
-      <Button type="submit">Edit Profile</Button>
+      <Link to="/editprofile">Edit Profile</Link>
       <Row id="row2">
         <Col className="cardHeader" id="bioCard">
           Bio
