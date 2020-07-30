@@ -43,6 +43,7 @@ const Signup = (props) => {
     if (response.status === 200) {
       setRegisterStatus(true);
       setAuthStatus({ isLoggedIn: true, username });
+      setRegistrationInputs({ password: '' }); // pw changed back to empty string in state after sending info to db
     } else setErrorMsg('New user could not be created - duplicate username/email');
   };
 
