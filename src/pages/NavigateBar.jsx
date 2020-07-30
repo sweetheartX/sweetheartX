@@ -2,20 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 
-<<<<<<< HEAD
-const NavigateBar = () => (
-  // <Navbar bg="primary" variant="dark">
-  <Navbar className="bg-danger" variant="dark">
-    {/* TODO: Point this href to `/explore` if User is authenticated */}
-    <Link to="/">
-      <Navbar.Brand>sweetheartX</Navbar.Brand>
-    </Link>
-=======
 // need to figure out how to hide/show certain buttons dependent on user's page status
 const NavigateBar = ({ authStatus }) => {
   const { isLoggedIn, username } = authStatus;
   const logoRedirect = isLoggedIn ? '/explore' : '/';
->>>>>>> 78403aa680c118a6b83689b62257b3987a7af003
 
   const styles = { color: 'white' };
 
@@ -25,21 +15,6 @@ const NavigateBar = ({ authStatus }) => {
       <Link to={logoRedirect}>
         <Navbar.Brand>Scratch Project</Navbar.Brand>
       </Link>
-<<<<<<< HEAD
-      <Link to="/login">
-        <span className="nav-link" style={{ color: 'white' }}>
-          Login
-        </span>
-      </Link>
-      <Link to="/signup">
-        <span className="nav-link" style={{ color: 'white' }}>
-          Signup
-        </span>
-      </Link>
-    </Nav>
-  </Navbar>
-);
-=======
 
       {/* Set class for Login and Signup button Nav item to `margin-left: auto;` */}
       <Nav className="ml-auto">
@@ -77,7 +52,6 @@ const NavigateBar = ({ authStatus }) => {
     </Navbar>
   );
 };
->>>>>>> 78403aa680c118a6b83689b62257b3987a7af003
 
 // SAFE TO DELETE?
 // // Search Bar Component
