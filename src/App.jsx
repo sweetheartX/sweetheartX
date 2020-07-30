@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Landing from './pages/Landing';
 import Messages from './pages/Messages'
@@ -10,7 +10,7 @@ import EditProfile from './pages/EditProfile'
 import NavigateBar from './pages/NavigateBar';
 import IdeaPage from './pages/IdeaPage';
 import SubmitIdea from './pages/SubmitIdea';
-import NoMatch from './pages/NoMatch'
+import NoMatch from './pages/NoMatch';
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
 
 const App = () => {
@@ -18,6 +18,19 @@ const App = () => {
     isLoggedIn: false,
     username: 'friend',
   });
+
+  useEffect(() => {
+    const session = () =>
+      fetch('/api/session')
+        .then((response) => response.json())
+        .then((data) => {
+          const { username } = data;
+          if (username) setAuthStatus({ isLoggedIn: true, username });
+        })
+        .catch((err) => console.log(err));
+
+    session();
+  }, []);
 
   return (
     <Router>
@@ -45,8 +58,7 @@ const App = () => {
           <Route exact path="/messages" render={() => <Messages authStatus={authStatus} />} />
           <Route exact path="/submit" render={() => <SubmitIdea authStatus={authStatus} />} />
           <Route exact path="/profile" render={() => <Profile authStatus={authStatus} />} />
-          <Route exact path="/editprofile" render={() => <EditProfile authStatus={authStatus} />} />
-          <Route component={NoMatch}/>
+          <Route component={NoMatch} />
         </Switch>
       </>
     </Router>

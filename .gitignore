@@ -7,6 +7,9 @@
 ehthumbs.db
 Thumbs.db
 
+# EDITOR
+.vscode
+
 # LOGS
 *.log
 
