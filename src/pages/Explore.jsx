@@ -6,7 +6,7 @@ import TechCheckbox from '../components/TechCheckbox';
 import DreamSearch from '../components/DreamSearch';
 import IdeaCard from '../components/IdeaCard';
 
-const Explore = ({ authStatus }) => {
+const Explore = () => {
   // For techFilter, if user checks off a tech, it gets added to array
   const [techFilter, setTechFilter] = useState([]);
   const [techList, setTechList] = useState([{ tech_id: '', name: '' }]);
@@ -86,7 +86,7 @@ const Explore = ({ authStatus }) => {
           <DreamSearch onChange={(e) => setQuery(e.target.value)} />
           <Row>
             {sortedIdeas.map((idea) => (
-              <IdeaCard key={idea.idea_id} authStatus={authStatus} idea={idea} />
+              <IdeaCard key={idea.idea_id} idea={idea} />
             ))}
           </Row>
         </Col>
