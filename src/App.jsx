@@ -23,7 +23,7 @@ const App = () => {
         .then((response) => response.json())
         .then((data) => {
           const { username } = data;
-          if (username !== null) setAuthStatus({ isLoggedIn: true, username });
+          if (username) setAuthStatus({ isLoggedIn: true, username });
         })
         .catch((err) => console.log(err));
 
