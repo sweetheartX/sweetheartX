@@ -4,27 +4,25 @@ import { Form, Button } from 'react-bootstrap';
 import '../styles/login-signup.scss';
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 
-const Login = (props) => {
-  const { authStatus, setAuthStatus } = props;
-
-  const [loginInputs, setLoginInputs] = useState({
-    username: '',
-    password: '',
-  });
+const Login = ({ authStatus, setAuthStatus }) => {
+  const { isLoggedIn } = authStatus;
 
   // used to toggle error message if auth fails
-  // as well as redirect if auth succeeds
-  const [loginStatus, setLoginStatus] = useState(null);
+  const [failedLogin, setFailedLogin] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleUsername = (e) => setUsername(e.target.value);
+  const handlePassword = (e) => setPassword(e.target.value);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Pulled from state => copied out but not validated?
-    const { username, password } = loginInputs;
     const body = {
       username,
       password,
     };
+
     const response = await fetch('/api/login', {
       method: 'POST',
       headers: {
@@ -34,17 +32,13 @@ const Login = (props) => {
     });
 
     if (response.status === 200) {
-      setLoginStatus(true);
+      // Reset password in state to empty string as security precaution
+      setPassword('');
       setAuthStatus({ isLoggedIn: true, username });
-      setLoginInputs({ password: '' }); // pw changed back to empty string in state after sending info to db
-    } else setLoginStatus(false);
+    } else setFailedLogin(true);
   };
 
-  const setInput = (e) => {
-    setLoginInputs({ ...loginInputs, [e.target.id]: e.target.value });
-  };
-
-  return loginStatus || authStatus.isLoggedIn ? (
+  return isLoggedIn ? (
     <Redirect to={{ pathname: '/explore' }} />
   ) : (
     <div className="login-container">
@@ -52,23 +46,25 @@ const Login = (props) => {
         <center>
           <h4>Welcome Back!</h4>
         </center>
+
         <Form>
           <Form.Group controlId="username">
             <Form.Label>Username</Form.Label>
-            <Form.Control placeholder="Username" type="username" onChange={setInput} />
+            <Form.Control placeholder="Username" type="username" onChange={handleUsername} />
           </Form.Group>
 
           <Form.Group controlId="password">
             <Form.Label>Password</Form.Label>
-            <Form.Control placeholder="Password" type="password" onChange={setInput} />
+            <Form.Control placeholder="Password" type="password" onChange={handlePassword} />
           </Form.Group>
 
           <Button type="submit" variant="primary" onClick={handleSubmit}>
             Submit
           </Button>
-          <div className={loginStatus === false ? 'error-msg' : 'hidden'}>
-            Sorry, your username/password was invalid.
-          </div>
+
+          {failedLogin && (
+            <div className="error-msg">Sorry, your username/password was invalid.</div>
+          )}
         </Form>
       </div>
     </div>
