@@ -5,7 +5,8 @@ import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 import '../styles/login-signup.scss';
 
 const EditProfile = (props) => {
-  const { authStatus } = props;
+
+  const { username, isLoggedIn } = props;
 
   const [profileInputs, setInputs] = useState({
     firstName: '',
@@ -41,8 +42,9 @@ const EditProfile = (props) => {
       linkedIn,
       personalPage,
     };
-
-    const response = await fetch('/api/editprofile', {
+    const url = `/api/${username}/editprofile`
+    console.log(url)
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -62,7 +64,7 @@ const EditProfile = (props) => {
     });
   };
 
-  return editStatus || authStatus.isLoggedIn ? (
+  return editStatus || isLoggedIn ? (
     <Redirect
       to={{
         pathname: '/editprofile',
