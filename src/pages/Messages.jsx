@@ -1,14 +1,14 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
 import { Container, ListGroup, Row, Col, Button } from 'react-bootstrap';
-import io from "socket.io-client";
+import io from 'socket.io-client';
 
 // const IDs = ['room1', 'room2', 'room3']
 
 let socket;
 const Messages = ({ authStatus }) => {
   const ENDPOINT = 'localhost:3000';
-  const name = authStatus.username || 'addescapecharhere?'
+  const name = authStatus.username || 'addescapecharhere?';
   // const { loaded, setLoaded } = useState('');
   const [messageRooms, setMessageRooms] = useState('');
   // currentRoom is the message_id, references 2 particpants
@@ -34,8 +34,8 @@ const Messages = ({ authStatus }) => {
     });
     // on disconnectioning from socket or leaving the current room
     return () => {
-      socket.emit('disconnect'); 
-      socket.off(); 
+      socket.emit('disconnect');
+      socket.off();
       // clear messages in state - had to do this to force the app to clear the messages displays
       setMessages([]);
     };
@@ -43,12 +43,12 @@ const Messages = ({ authStatus }) => {
 
   /* On message submission */
   useEffect(() => {
-    // listen for 'message' event (returned message is an object with 'user' and 'text' props) 
+    // listen for 'message' event (returned message is an object with 'user' and 'text' props)
     socket.on('message', (message) => {
-      console.log(message)
-      setMessages([...messages, message]) 
-    })
-  }, [messages])
+      console.log(message);
+      setMessages([...messages, message]);
+    });
+  }, [messages]);
 
   /* Method Defs */
 
@@ -74,9 +74,9 @@ const Messages = ({ authStatus }) => {
   };
   // set room when list item clicked
   const changeRoom = (e) => {
-    console.log('room change', e.target.value)
+    console.log('room change', e.target.value);
     setRoom(e.target.value);
-  }
+  };
 
   /* render */
   return (
@@ -87,18 +87,26 @@ const Messages = ({ authStatus }) => {
           <h2>Inbox</h2>
           <ListGroup variant="flush">
             {/* {chatPartners} */}
-            <ListGroup.Item ><Button value="id1" onClick={changeRoom}>
-              Room 1
-            </Button></ListGroup.Item>
-            <ListGroup.Item ><Button value="id1" onClick={changeRoom}>
-              Room 2
-            </Button></ListGroup.Item>
-            <ListGroup.Item ><Button value="id1" onClick={changeRoom}>
-              Room 3
-            </Button></ListGroup.Item>
-            <ListGroup.Item ><Button value="id1" onClick={changeRoom}>
-              Room 4
-            </Button></ListGroup.Item>
+            <ListGroup.Item>
+              <Button value="id1" onClick={changeRoom}>
+                Room 1
+              </Button>
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Button value="id1" onClick={changeRoom}>
+                Room 2
+              </Button>
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Button value="id1" onClick={changeRoom}>
+                Room 3
+              </Button>
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Button value="id1" onClick={changeRoom}>
+                Room 4
+              </Button>
+            </ListGroup.Item>
           </ListGroup>
         </Col>
 
@@ -109,7 +117,6 @@ const Messages = ({ authStatus }) => {
             {messages.map((msg, index) =>
               // if you are the sender, render your message
               msg.user === name ? (
-                
                 <div
                   key={index}
                   className="row"

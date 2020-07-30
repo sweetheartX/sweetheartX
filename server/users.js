@@ -1,4 +1,4 @@
-/* this file stores an array and methods that maintain message rooms, and the users in them */
+/* this file stores an array and functions that manage message rooms via socket IDs, and the users in them */
 
 const users = [];
 
@@ -8,6 +8,7 @@ const addUser = ({ id, name, room }) => {
   return { user };
 };
 
+// removes user from current room
 const removeUser = (id) => {
   const index = users.findIndex((user) => user.id === id);
   if (index !== -1) return users.splice(index, 1)[0];

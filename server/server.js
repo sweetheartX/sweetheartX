@@ -25,6 +25,7 @@ const PORT = 3000;
 // imports used by socket.io
 const server = http.createServer(app);
 const io = socket(server);
+// import functions from message room manager
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
 
 
@@ -51,11 +52,12 @@ app.use(
 // socket logic - add middleware, move to another file? *name is username
 io.on('connection', (socket) => {
   socket.on('join', ({ name, room }, callback) => {
+    // add user to room manager using socket ID
     const { error, user } = addUser({ id: socket.id, name, room });
 
     if (error) return callback(error);
 
-    socket.join(user.room); // joins suer to room
+    socket.join(user.room); // joins user to room
     socket.emit('message', {
       user: 'admin',
       text: `Hi, ${user.name}, you are now in room ${user.room}!`,
@@ -69,7 +71,7 @@ io.on('connection', (socket) => {
     const user = getUser(socket.id);
 
     io.to(user.room).emit('message', { user: user.name, text: message });
-    io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
+    // io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
 
     callback();
   });
