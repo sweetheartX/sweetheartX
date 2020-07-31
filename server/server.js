@@ -7,12 +7,13 @@ const PgStore = require('connect-pg-simple')(session);
 
 require('dotenv').config();
 
-const http = require('http'); 
+const http = require('http');
 const socket = require('socket.io');
 const signUpRouter = require('./Routers/signupRouter');
 const exploreRouter = require('./Routers/exploreRouter');
 const submitRouter = require('./Routers/submitRouter');
 const loginRouter = require('./Routers/loginRouter');
+const logoutRouter = require('./Routers/logoutRouter');
 const profileRouter = require('./Routers/profileRouter');
 const sessionRouter = require('./Routers/sessionRouter');
 
@@ -33,7 +34,6 @@ const server = http.createServer(app);
 const io = socket(server);
 // import functions from message room manager
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
-
 
 // initializePassport(passport);
 // Handle parsing request body
@@ -100,6 +100,7 @@ app.use(express.static(path.join(__dirname, '../dist')));
 
 // Routing
 app.use('/api/login', loginRouter);
+app.use('/api/logout', logoutRouter);
 app.use('/api/signup', signUpRouter);
 app.use('/api/explore', exploreRouter);
 app.use('/api/submit', submitRouter);

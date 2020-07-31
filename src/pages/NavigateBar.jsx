@@ -1,14 +1,28 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
+import '../styles/logout.scss';
 import '../styles/nav.scss';
 
 // need to figure out how to hide/show certain buttons dependent on user's page status
-const NavigateBar = ({ authStatus }) => {
+const NavigateBar = ({ authStatus, setAuthStatus }) => {
   const { isLoggedIn, username } = authStatus;
   const logoRedirect = isLoggedIn ? '/explore' : '/';
 
   const styles = { color: 'white' };
+
+  const logout = async () => {
+    const response = await fetch('/api/logout', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.status === 200) {
+      setAuthStatus({ isLoggedIn: false });
+    }
+  };
 
   return (
     <Navbar bg="danger" id="navBox" variant="dark">
@@ -38,6 +52,16 @@ const NavigateBar = ({ authStatus }) => {
               <span className="nav-link" style={styles}>
                 Messages
               </span>
+            </Link>
+            <Link to="/">
+              <button
+                className="nav-link"
+                style={{ color: 'white' }}
+                type="button"
+                onClick={logout}
+              >
+                Log Out
+              </button>
             </Link>
           </>
         ) : (
