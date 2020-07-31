@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Button } from 'react-bootstrap';
+import '../styles/ideacard.scss';
 
 const IdeaCard = ({ idea }) => {
   const { image, name, description, techstacks, idea_id } = idea;
 
   return (
-    <Card className="m-3" style={{ width: '20rem' }}>
+    <Card className="m-3" id="card" style={{ width: '20rem' }}>
       <Card.Img src={image} variant="top" />
       <Card.Body>
         <Card.Title>{name}</Card.Title>
@@ -16,7 +17,7 @@ const IdeaCard = ({ idea }) => {
           {techstacks.join(', ')}
         </Card.Text>
         <Link to={`/idea/${idea_id}`}>
-          <Button variant="primary"> Find out more </Button>
+          <Button variant="danger"> Find out more </Button>
         </Link>
       </Card.Body>
     </Card>
