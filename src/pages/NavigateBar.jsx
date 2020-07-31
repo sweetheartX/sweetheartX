@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 import '../styles/logout.scss';
+import '../styles/nav.scss';
 
 // need to figure out how to hide/show certain buttons dependent on user's page status
 const NavigateBar = ({ authStatus, setAuthStatus }) => {
@@ -24,7 +25,7 @@ const NavigateBar = ({ authStatus, setAuthStatus }) => {
   };
 
   return (
-    <Navbar bg="danger" variant="dark">
+    <Navbar bg="danger" id="navBox" variant="dark">
       {/* TODO: Point this href to `/explore` if User is authenticated */}
       <Link to={logoRedirect}>
         <Navbar.Brand>sweetheartX</Navbar.Brand>
@@ -48,7 +49,7 @@ const NavigateBar = ({ authStatus, setAuthStatus }) => {
               </span>
             </Link>
             <Link to="/messages">
-              <span className="nav-link" style={{ color: 'white' }}>
+              <span className="nav-link" style={styles}>
                 Messages
               </span>
             </Link>
