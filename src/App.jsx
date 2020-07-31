@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
+import Bio from './pages/Bio';
 import NavigateBar from './pages/NavigateBar';
 import IdeaPage from './pages/IdeaPage';
 import SubmitIdea from './pages/SubmitIdea';
@@ -16,7 +17,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.css';
 const App = () => {
   const [authStatus, setAuthStatus] = useState({
     isLoggedIn: false,
-    username: 'friend',
+    username: 'test',
   });
 
   useEffect(() => {
@@ -58,6 +59,8 @@ const App = () => {
           <Route exact path="/messages" render={() => <Messages authStatus={authStatus} />} />
           <Route exact path="/submit" render={() => <SubmitIdea authStatus={authStatus} />} />
           <Route exact path="/profile" render={() => <Profile authStatus={authStatus} />} />
+          <Route exact path="/editprofile" render={() => <EditProfile authStatus={authStatus} />} />
+          <Route exact path="/bio" render={() => <Bio authStatus={authStatus} />} />
           <Route component={NoMatch} />
         </Switch>
       </>

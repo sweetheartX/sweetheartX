@@ -15,6 +15,7 @@ const submitRouter = require('./Routers/submitRouter');
 const loginRouter = require('./Routers/loginRouter');
 const logoutRouter = require('./Routers/logoutRouter');
 const profileRouter = require('./Routers/profileRouter');
+const bioRouter = require('./Routers/bioRouter');
 const sessionRouter = require('./Routers/sessionRouter');
 
 // PASSPORT
@@ -105,6 +106,7 @@ app.use('/api/signup', signUpRouter);
 app.use('/api/explore', exploreRouter);
 app.use('/api/submit', submitRouter);
 app.use('/api/profile', profileRouter);
+app.use('/api/bio', bioRouter);
 app.use('/api/session', sessionRouter);
 
 // 404 catch all error handler

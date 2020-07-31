@@ -63,15 +63,16 @@ const EditProfile = (props) => {
     });
   };
 
-  return editStatus || isLoggedIn ? (
-    <Redirect
-      to={{
-        pathname: '/editprofile',
-      }}
-    />
-  ) : (
+  return (
+    /* editStatus || isLoggedIn ? */ //   <Redirect
+    //     to={{
+    //       pathname: '/editprofile',
+    //     }}
+    //   />
+    // ) : (
     <>
       <center>
+        <br />
         <h4>Edit Profile:</h4>
       </center>
       <Form onSubmit={handleSubmit}>

@@ -32,14 +32,16 @@ authController.getUser = (req, res, next) => {
 // signup new fields for firstname and lastname
 
 authController.getProfile = async (req, res, next) => {
-  const { username } = req.params;
+  console.log('here');
+  // const { username } = req.body;
+  const username = 'test';
   const queryText = 'SELECT * FROM Users WHERE username=$1';
   try {
     const userData = await model.query(queryText, [username]);
     [res.locals.userData] = userData.rows;
+    // console.log(userData.rows);
     return next();
   } catch (err) {
-    console.log(err);
     return next({
       log: `error occurred at getProfile middleware. error message is: ${err}`,
       status: 400,

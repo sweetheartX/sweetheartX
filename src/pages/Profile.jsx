@@ -10,7 +10,7 @@ const Profile = (props) => {
    * creatorUsername (possibly) passed in from IdeaPage
    * authStatus always passed in from App
    */
-  console.log(props);
+  // console.log(props);
   const { ideaCreator, authStatus } = props;
 
   // Destructure currently authenticated user's username from authStatus
@@ -75,7 +75,7 @@ const Profile = (props) => {
       <Link to="/editprofile">Edit Profile</Link>
       <Row id="row2">
         <Col className="cardHeader" id="bioCard">
-          Bio
+          <Link to="/bio">Bio</Link>
         </Col>
         <Col className="cardHeader ml-5" id="contactInfoCard">
           Where else can your future teammates contact you?
