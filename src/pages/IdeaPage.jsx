@@ -118,18 +118,18 @@ const IdeaPage = ({ match, authStatus }) => {
           <Container>
             <Row className="mx-auto">
               {!interested ? (
-                <Button className="m-2" variant="info" onClick={handleInterestClick}>
+                <Button className="m-2" variant="danger" onClick={handleInterestClick}>
                   I'm Interested!
                 </Button>
               ) : (
-                <Button disabled className="m-2" variant="info">
+                <Button disabled className="m-2" variant="danger">
                   Idea Creator Notified!
                 </Button>
               )}
             </Row>
             <Row className="mx-auto">
               <NavLink to="/explore">
-                <Button className="m-2" variant="primary">
+                <Button className="m-2" variant="danger">
                   Back to Explore
                 </Button>
               </NavLink>
