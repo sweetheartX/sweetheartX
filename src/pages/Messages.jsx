@@ -88,22 +88,22 @@ const Messages = ({ authStatus }) => {
           <ListGroup variant="flush">
             {/* {chatPartners} */}
             <ListGroup.Item>
-              <Button value="id1" onClick={changeRoom}>
+              <Button value="id1" variant="danger" onClick={changeRoom}>
                 Room 1
               </Button>
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button value="id1" onClick={changeRoom}>
+              <Button value="id1" variant="danger" onClick={changeRoom}>
                 Room 2
               </Button>
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button value="id1" onClick={changeRoom}>
+              <Button value="id1" variant="danger" onClick={changeRoom}>
                 Room 3
               </Button>
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button value="id1" onClick={changeRoom}>
+              <Button value="id1" variant="danger" onClick={changeRoom}>
                 Room 4
               </Button>
             </ListGroup.Item>
@@ -159,7 +159,12 @@ const Messages = ({ authStatus }) => {
                   onChange={handleChange}
                 />
               </div>
-              <button className="btn btn-primary w-100" type="submit" onClick={sendMessage}>
+              <button
+                className="btn btn-primary w-100"
+                style={{ backgroundColor: '#dc3545', borderColor: '#dc3545' }}
+                type="submit"
+                onClick={sendMessage}
+              >
                 Send Message
               </button>
             </form>

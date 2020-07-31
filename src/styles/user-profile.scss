@@ -5,11 +5,13 @@
 
 .cardHeader {
   display: flex;
-  background-color: #2E7BFF;
+  background-color: #dc3545;
+  box-shadow: 3px 3px 4px 5px #f5e0e0;
   justify-content: center;
   align-items: center;
   height: 50px;
   width: 2rem;
+  color: white;
 }
 
 #row1 {
