@@ -5,7 +5,6 @@ import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 import '../styles/login-signup.scss';
 
 const EditProfile = (props) => {
-
   const { username, isLoggedIn } = props;
 
   const [profileInputs, setInputs] = useState({
@@ -42,8 +41,8 @@ const EditProfile = (props) => {
       linkedIn,
       personalPage,
     };
-    const url = `/api/${username}/editprofile`
-    console.log(url)
+    const url = `/api/${username}/editprofile`;
+    console.log(url);
     const response = await fetch(url, {
       method: 'POST',
       headers: {
